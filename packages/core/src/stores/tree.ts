@@ -290,16 +290,22 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
   return state;
 };
 
+const setFieldTree = (state, path, newField, config) => {};
+
 /**
  * @param {Immutable.Map} state
  * @param {Immutable.List} path
  * @param {string} field
  */
 const setField = (state, path, newField, config) => {
-  if (!newField) return removeItem(state, path);
+  if (!newField) {
+    return removeItem(state, path);
+  }
 
   const { fieldSeparator, setOpOnChangeField, showErrorMessage } = config.settings;
-  if (Array.isArray(newField)) newField = newField.join(fieldSeparator);
+  if (Array.isArray(newField)) {
+    newField = newField.join(fieldSeparator);
+  }
 
   const currentType = state.getIn(expandTreePath(path, 'type'));
   const wasRuleGroup = currentType == 'rule_group';

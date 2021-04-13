@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import Immutable from 'immutable';
+
 import RuleContainer from './containers/RuleContainer';
 import Draggable from './containers/Draggable';
 import Widget from './Widget';
@@ -15,6 +16,7 @@ import OperatorWrapper from './OperatorWrapper';
 import Col from './Col';
 import FieldWrapper from './FieldWrapper';
 import ConfirmFn from './ConfirmFn';
+import { FieldFuncWidget } from './widgets';
 
 const dummyFn = () => {};
 const DragIcon = () => (
@@ -29,34 +31,34 @@ const DragIcon = () => (
     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
   </svg>
 );
+
+type RuleProps = {
+  selectedField?: string;
+  selectedOperator?: string;
+  operatorOptions?: any;
+  config: any;
+  value?: any; // depends on widget
+  valueSrc?: any;
+  isDraggingMe?: boolean;
+  isDraggingTempo?: boolean;
+  parentField?: string; // from RuleGroup
+  valueError?: any;
+  // actions
+  handleDraggerMouseDown?: () => void;
+  setField?: () => void;
+  setOperator?: () => void;
+  setOperatorOption?: () => void;
+  removeSelf?: () => void;
+  setValue?: () => void;
+  setValueSrc?: () => void;
+  reordableNodesCnt?: number;
+};
+
 @RuleContainer
 @Draggable('rule')
 @ConfirmFn
-class Rule extends PureComponent {
-  static propTypes = {
-    selectedField: PropTypes.string,
-    selectedOperator: PropTypes.string,
-    operatorOptions: PropTypes.object,
-    config: PropTypes.object.isRequired,
-    value: PropTypes.any, // depends on widget
-    valueSrc: PropTypes.any,
-    isDraggingMe: PropTypes.bool,
-    isDraggingTempo: PropTypes.bool,
-    parentField: PropTypes.string, // from RuleGroup
-    valueError: PropTypes.any,
-    // path: PropTypes.instanceOf(Immutable.List),
-    // actions
-    handleDraggerMouseDown: PropTypes.func,
-    setField: PropTypes.func,
-    setOperator: PropTypes.func,
-    setOperatorOption: PropTypes.func,
-    removeSelf: PropTypes.func,
-    setValue: PropTypes.func,
-    setValueSrc: PropTypes.func,
-    reordableNodesCnt: PropTypes.number,
-  };
-
-  constructor(props) {
+class Rule extends PureComponent<RuleProps> {
+  constructor(props: RuleProps) {
     super(props);
     useOnPropsChanged(this);
 
@@ -148,7 +150,7 @@ class Rule extends PureComponent {
   };
 
   render() {
-    const { config, valueError } = this.props;
+    const { config, valueError, selectedField, selectedOperator, value } = this.props;
     const {
       selectedFieldPartsLabels,
       selectedFieldWidgetConfig,
@@ -162,7 +164,6 @@ class Rule extends PureComponent {
       deleteLabel,
       renderBeforeWidget,
       renderAfterWidget,
-      renderSize,
       immutableGroupsMode,
       immutableFieldsMode,
       immutableOpsMode,
@@ -202,8 +203,8 @@ class Rule extends PureComponent {
       <Col key={`widget-for-${this.props.selectedOperator}`} className="rule--value">
         <Widget
           key="values"
-          field={this.props.selectedField}
-          operator={this.props.selectedOperator}
+          field={selectedField}
+          operator={selectedOperator}
           value={this.props.value}
           valueSrc={this.props.valueSrc}
           valueError={valueError}
@@ -222,8 +223,8 @@ class Rule extends PureComponent {
       >
         <OperatorOptions
           key="operatorOptions"
-          selectedField={this.props.selectedField}
-          selectedOperator={this.props.selectedOperator}
+          selectedField={selectedField}
+          selectedOperator={selectedOperator}
           operatorOptions={this.props.operatorOptions}
           setOperatorOption={!immutableOpsMode ? this.props.setOperatorOption : dummyFn}
           config={config}
@@ -233,10 +234,7 @@ class Rule extends PureComponent {
     );
 
     const beforeWidget = renderBeforeWidget && (
-      <Col
-        key={`before-widget-for-${this.props.selectedOperator}`}
-        className="rule--before-widget"
-      >
+      <Col key={`before-widget-for-${selectedOperator}`} className="rule--before-widget">
         {typeof renderBeforeWidget === 'function'
           ? renderBeforeWidget(this.props)
           : renderBeforeWidget}
@@ -244,10 +242,7 @@ class Rule extends PureComponent {
     );
 
     const afterWidget = renderAfterWidget && (
-      <Col
-        key={`after-widget-for-${this.props.selectedOperator}`}
-        className="rule--after-widget"
-      >
+      <Col key={`after-widget-for-${selectedOperator}`} className="rule--after-widget">
         {typeof renderAfterWidget === 'function'
           ? renderAfterWidget(this.props)
           : renderAfterWidget}
@@ -261,14 +256,33 @@ class Rule extends PureComponent {
           .filter((e) => !!e)
           .shift()) ||
       null;
+
     const error = showErrorMessage && oneValueError && (
       <div className="rule--error">
         {renderRuleError ? renderRuleError({ error: oneValueError }) : oneValueError}
       </div>
     );
+
+    const filedFuncWidget = selectedField && (
+      <Col key={`widget-for-${selectedField}`} className="rule--value">
+        <FieldFuncWidget
+          key="values"
+          field={selectedField}
+          operator={selectedOperator}
+          value={new Immutable.Map({ value: selectedField })}
+          config={config}
+          setValue={(val) => {
+            console.log('val', val.toJS());
+            // this.props.setField(val);
+          }}
+          readonly={immutableValuesMode}
+        />
+      </Col>
+    );
+
     const fullWidget = [beforeWidget, widget, afterWidget];
 
-    const parts = [field, operator, ...fullWidget, operatorOptions];
+    const parts = [filedFuncWidget, field, operator, ...fullWidget, operatorOptions];
 
     const drag = showDragIcon && (
       <span

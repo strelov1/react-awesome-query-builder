@@ -259,11 +259,16 @@ export const getFuncArgConfig = (funcKey, argKey, config) => {
 
 export const getFieldConfig = (field, config) => {
   if (!field) return null;
-  if (typeof field === 'object' && !field.func && !!field.type) return field;
-  if (typeof field === 'object' && field.func && field.arg)
+  if (typeof field === 'object' && !field.func && !!field.type) {
+    return field;
+  }
+  if (typeof field === 'object' && field.func && field.arg) {
     return getFuncArgConfig(field.func, field.arg, config);
+  }
   const fieldConfig = getFieldRawConfig(field, config);
-  if (!fieldConfig) return null; // throw new Error("Can't find field " + field + ", please check your config");
+  if (!fieldConfig) {
+    return null; // throw new Error("Can't find field " + field + ", please check your config");
+  }
 
   // merge, but don't merge operators (rewrite instead)
   const typeConfig = config.types[fieldConfig.type] || {};
@@ -514,6 +519,8 @@ export const getValueSourcesForFieldOp = (
 export const getWidgetForFieldOp = (config, field, operator, valueSrc = null) => {
   const { widgets } = _getWidgetsAndSrcsForFieldOp(config, field, operator, valueSrc);
   let widget = null;
-  if (widgets.length) widget = widgets[0];
+  if (widgets.length) {
+    widget = widgets[0];
+  }
   return widget;
 };

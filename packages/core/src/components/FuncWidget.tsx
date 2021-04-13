@@ -1,25 +1,23 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import FuncSelect from './FuncSelect';
 import { getFuncConfig } from '../utils/configUtils';
-import Widget from './Widget';
+import ArgWidget from './ArgWidget';
 import { setFunc, setArgValue, setArgValueSrc } from '../utils/funcUtils';
 import { useOnPropsChanged } from '../utils/stuff';
+import Col from './Col';
 
-const Col = ({ children, ...props }) => <div {...props}>{children}</div>;
+type FuncWidgetProps = {
+  config: any;
+  field: string;
+  operator: any;
+  customProps?: any;
+  value?: any;
+  setValue: any;
+  readonly?: boolean;
+};
 
-export default class FuncWidget extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    field: PropTypes.string.isRequired,
-    operator: PropTypes.string.isRequired,
-    customProps: PropTypes.object,
-    value: PropTypes.object, // instanceOf(Immutable.Map) //with keys 'func' and `args`
-    setValue: PropTypes.func.isRequired,
-    readonly: PropTypes.bool,
-  };
-
-  constructor(props) {
+export default class FuncWidget extends PureComponent<FuncWidgetProps> {
+  constructor(props: FuncWidgetProps) {
     super(props);
     useOnPropsChanged(this);
 
@@ -166,9 +164,13 @@ export default class FuncWidget extends PureComponent {
 
   renderFuncArgs = () => {
     const { funcDefinition, funcKey } = this.meta;
-    if (!funcKey) return null;
+    if (!funcKey) {
+      return null;
+    }
     const { args } = funcDefinition;
-    if (!args) return null;
+    if (!args) {
+      return null;
+    }
 
     return (
       <>
@@ -194,37 +196,6 @@ export default class FuncWidget extends PureComponent {
         {this.renderFuncSelect()}
         {this.renderFuncArgs()}
       </Col>
-    );
-  }
-}
-
-class ArgWidget extends PureComponent {
-  static propTypes = {
-    funcKey: PropTypes.string.isRequired,
-    argKey: PropTypes.string.isRequired,
-    setValue: PropTypes.func.isRequired,
-    setValueSrc: PropTypes.func.isRequired,
-    readonly: PropTypes.bool,
-  };
-
-  setValue = (_delta, value, _widgetType) => {
-    const { setValue, argKey } = this.props;
-    setValue(argKey, value);
-  };
-
-  setValueSrc = (_delta, valueSrc, _widgetType) => {
-    const { setValueSrc, argKey } = this.props;
-    setValueSrc(argKey, valueSrc);
-  };
-
-  render() {
-    return (
-      <Widget
-        {...this.props}
-        setValue={this.setValue}
-        setValueSrc={this.setValueSrc}
-        isFuncArg
-      />
     );
   }
 }
