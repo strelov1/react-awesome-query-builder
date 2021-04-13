@@ -1,9 +1,7 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RuleContainer from './containers/RuleContainer';
 import Draggable from './containers/Draggable';
-import Field from './Field';
-import Operator from './Operator';
 import Widget from './Widget';
 import OperatorOptions from './OperatorOptions';
 import {
@@ -13,8 +11,11 @@ import {
   getFieldWidgetConfig,
 } from '../utils/configUtils';
 import { useOnPropsChanged } from '../utils/stuff';
+import OperatorWrapper from './OperatorWrapper';
+import Col from './Col';
+import FieldWrapper from './FieldWrapper';
+import ConfirmFn from './ConfirmFn';
 
-const Col = ({ children, ...props }) => <div {...props}>{children}</div>;
 const dummyFn = () => {};
 const DragIcon = () => (
   <svg
@@ -28,13 +29,6 @@ const DragIcon = () => (
     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
   </svg>
 );
-
-const ConfirmFn = (Cmp) => (props) => {
-  const { useConfirm } = props.config.settings;
-  const confirmFn = useConfirm ? useConfirm() : null;
-  return <Cmp {...props} confirmFn={confirmFn} />;
-};
-
 @RuleContainer
 @Draggable('rule')
 @ConfirmFn
@@ -220,6 +214,7 @@ class Rule extends PureComponent {
         />
       </Col>
     );
+
     const operatorOptions = showOperatorOptions && (
       <Col
         key={`op-options-for-${this.props.selectedOperator}`}
@@ -271,8 +266,9 @@ class Rule extends PureComponent {
         {renderRuleError ? renderRuleError({ error: oneValueError }) : oneValueError}
       </div>
     );
+    const fullWidget = [beforeWidget, widget, afterWidget];
 
-    const parts = [field, operator, beforeWidget, widget, afterWidget, operatorOptions];
+    const parts = [field, operator, ...fullWidget, operatorOptions];
 
     const drag = showDragIcon && (
       <span
@@ -312,82 +308,6 @@ class Rule extends PureComponent {
         {del}
       </>
     );
-  }
-}
-
-export class FieldWrapper extends PureComponent {
-  render() {
-    const {
-      config,
-      selectedField,
-      setField,
-      parentField,
-      classname,
-      readonly,
-    } = this.props;
-    return (
-      <Col className={classname}>
-        {config.settings.showLabels && (
-          <label className="rule--label">{config.settings.fieldLabel}</label>
-        )}
-        <Field
-          config={config}
-          selectedField={selectedField}
-          parentField={parentField}
-          setField={setField}
-          customProps={config.settings.customFieldSelectProps}
-          readonly={readonly}
-        />
-      </Col>
-    );
-  }
-}
-
-class OperatorWrapper extends PureComponent {
-  render() {
-    const {
-      config,
-      selectedField,
-      selectedOperator,
-      setOperator,
-      selectedFieldPartsLabels,
-      showOperator,
-      showOperatorLabel,
-      selectedFieldWidgetConfig,
-      readonly,
-    } = this.props;
-    const operator = showOperator && (
-      <Col
-        key={`operators-for-${(selectedFieldPartsLabels || []).join('_')}`}
-        className="rule--operator"
-      >
-        {config.settings.showLabels && (
-          <label className="rule--label">{config.settings.operatorLabel}</label>
-        )}
-        <Operator
-          key="operator"
-          config={config}
-          selectedField={selectedField}
-          selectedOperator={selectedOperator}
-          setOperator={setOperator}
-          readonly={readonly}
-        />
-      </Col>
-    );
-    const hiddenOperator = showOperatorLabel && (
-      <Col
-        key={`operators-for-${(selectedFieldPartsLabels || []).join('_')}`}
-        className="rule--operator"
-      >
-        <div className="rule--operator">
-          {config.settings.showLabels ? (
-            <label className="rule--label">&nbsp;</label>
-          ) : null}
-          <span>{selectedFieldWidgetConfig.operatorInlineLabel}</span>
-        </div>
-      </Col>
-    );
-    return [operator, hiddenOperator];
   }
 }
 

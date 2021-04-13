@@ -1,28 +1,8 @@
 import React, { useState } from 'react';
-import { Query, Builder, Utils, BasicConfig } from '@react-query-builder/core';
+import { Query, Builder, Utils } from '@react-query-builder/core';
+import config from './config';
 
 import './style.scss';
-
-const config = {
-  ...BasicConfig,
-  fields: {
-    qty: {
-      label: 'qty',
-      type: 'number',
-      fieldSettings: {
-        min: 0,
-      },
-      valueSources: ['value'],
-      preferWidgets: ['number'],
-    },
-    test: {
-      label: 'test',
-      type: 'text',
-      valueSources: ['value'],
-      preferWidgets: ['number'],
-    },
-  },
-};
 
 const App = () => {
   const [tree, setTree] = useState<any>(

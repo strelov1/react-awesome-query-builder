@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
@@ -8,9 +8,7 @@ import {
   getFieldConfig,
   getFuncConfig,
   getFieldPath,
-  getFieldPathLabels,
   getFuncPathLabels,
-  getValueSourcesForFieldOp,
   getWidgetForFieldOp,
 } from '../utils/configUtils';
 

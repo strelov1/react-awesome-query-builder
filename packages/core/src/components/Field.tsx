@@ -1,21 +1,19 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { PureComponent } from 'react';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
 import { getFieldConfig, getFieldPath, getFieldPathLabels } from '../utils/configUtils';
 import { truncateString, useOnPropsChanged } from '../utils/stuff';
 
-export default class Field extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    selectedField: PropTypes.string,
-    parentField: PropTypes.string,
-    customProps: PropTypes.object,
-    readonly: PropTypes.bool,
-    // actions
-    setField: PropTypes.func.isRequired,
-  };
-
+type FieldProps = {
+  config: any;
+  selectedField?: string;
+  parentField?: string;
+  customProps?: any;
+  readonly?: boolean;
+  // actions
+  setField: () => void;
+};
+export default class Field extends PureComponent<FieldProps> {
   constructor(props) {
     super(props);
     useOnPropsChanged(this);

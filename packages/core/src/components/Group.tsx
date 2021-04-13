@@ -1,12 +1,12 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import startsWith from 'lodash/startsWith';
 import GroupContainer from './containers/GroupContainer';
 import Draggable from './containers/Draggable';
-import Item from './Item';
 import { GroupActions } from './GroupActions';
-
-const classNames = require('classnames');
+import ConfirmFn from './ConfirmFn';
+import Item from './Item';
 
 const defaultPosition = 'topRight';
 const dummyFn = () => {};
@@ -22,13 +22,6 @@ const DragIcon = () => (
     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
   </svg>
 );
-
-const ConfirmFn = (Cmp) => (props) => {
-  const { useConfirm } = props.config.settings;
-  const confirmFn = useConfirm ? useConfirm() : null;
-  return <Cmp {...props} confirmFn={confirmFn} />;
-};
-
 export class Group extends PureComponent {
   static propTypes = {
     // tree: PropTypes.instanceOf(Immutable.Map).isRequired,

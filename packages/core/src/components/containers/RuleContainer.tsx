@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFieldConfig } from '../../utils/configUtils';
 import { pureShouldComponentUpdate } from '../../utils/renderUtils';
-
-const classNames = require('classnames');
 
 export default (Rule) => {
   class RuleContainer extends Component {

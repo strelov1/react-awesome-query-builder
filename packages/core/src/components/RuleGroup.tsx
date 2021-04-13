@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GroupContainer from './containers/GroupContainer';
 import Draggable from './containers/Draggable';
-import { Group } from './Group';
 import { RuleGroupActions } from './RuleGroupActions';
-import { FieldWrapper } from './Rule';
 import { useOnPropsChanged } from '../utils/stuff';
+import FieldWrapper from './FieldWrapper';
+import { Group } from './Group';
 
 @GroupContainer
 @Draggable('group rule_group')
