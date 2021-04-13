@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "compilerOptions": {
+    "rootDir": "srcold",
+    "outDir": "dist",
+    "baseUrl": "srcold",
+    "module": "esnext"
+  },
+  "include": ["srcold"]
+}
