@@ -1,6 +1,6 @@
 {
   "name": "@react-query-builder/antd",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "src/index.ts",
   "author": "Ilya Strelov <strelov1@gmail.com> (https://github.com/strelov1)",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@react-query-builder/core": "^0.0.5",
+    "@react-query-builder/core": "^0.0.6",
     "antd": "^4.15.1",
     "react": "^17.0.2"
   }
