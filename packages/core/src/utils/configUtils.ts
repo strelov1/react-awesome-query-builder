@@ -52,8 +52,9 @@ function _extendTypeConfig(type, typeConfig, config) {
 
       operators = operators.concat(typeWidgetConfig.operators.slice());
     }
-    if (typeWidgetConfig.defaultOperator)
+    if (typeWidgetConfig.defaultOperator) {
       defaultOperator = typeWidgetConfig.defaultOperator;
+    }
     if (widget == typeConfig.mainWidget) {
       typeWidgetConfig = merge(
         {},
@@ -63,17 +64,20 @@ function _extendTypeConfig(type, typeConfig, config) {
     }
     typeConfig.widgets[widget] = typeWidgetConfig;
   }
-  if (!typeConfig.valueSources)
+  if (!typeConfig.valueSources) {
     typeConfig.valueSources = Object.keys(config.settings.valueSourcesInfo);
+  }
   for (const valueSrc of typeConfig.valueSources) {
     if (valueSrc != 'value' && !typeConfig.widgets[valueSrc]) {
       typeConfig.widgets[valueSrc] = {};
     }
   }
-  if (!typeConfig.operators && operators)
-    typeConfig.operators = Array.from(new Set(operators)); // unique
-  if (!typeConfig.defaultOperator && defaultOperator)
+  if (!typeConfig.operators && operators) {
+    typeConfig.operators = Array.from(new Set(operators));
+  } // unique
+  if (!typeConfig.defaultOperator && defaultOperator) {
     typeConfig.defaultOperator = defaultOperator;
+  }
 }
 
 function _extendFieldsConfig(subconfig, config) {
@@ -90,8 +94,9 @@ function _extendFuncArgsConfig(subconfig, config) {
   for (const funcKey in subconfig) {
     const funcDef = subconfig[funcKey];
     if (funcDef.returnType) {
-      if (!config._funcsCntByType[funcDef.returnType])
+      if (!config._funcsCntByType[funcDef.returnType]) {
         config._funcsCntByType[funcDef.returnType] = 0;
+      }
       config._funcsCntByType[funcDef.returnType]++;
     }
     for (const argKey in funcDef.args) {
@@ -129,8 +134,9 @@ function _extendFieldConfig(fieldConfig, config, isFuncArg = false) {
       return;
     }
     if (!isFuncArg) {
-      if (!config._fieldsCntByType[fieldConfig.type])
+      if (!config._fieldsCntByType[fieldConfig.type]) {
         config._fieldsCntByType[fieldConfig.type] = 0;
+      }
       config._fieldsCntByType[fieldConfig.type]++;
     }
 
@@ -156,8 +162,9 @@ function _extendFieldConfig(fieldConfig, config, isFuncArg = false) {
             typeWidgetConfig.operators.filter((o) => !excludeOperators.includes(o))
           );
         }
-        if (fieldWidgetConfig.defaultOperator)
+        if (fieldWidgetConfig.defaultOperator) {
           defaultOperator = fieldWidgetConfig.defaultOperator;
+        }
       }
 
       if (widget == fieldConfig.mainWidget) {
@@ -170,10 +177,12 @@ function _extendFieldConfig(fieldConfig, config, isFuncArg = false) {
       fieldConfig.widgets[widget] = fieldWidgetConfig;
     }
     if (!isFuncArg) {
-      if (!fieldConfig.operators && operators)
+      if (!fieldConfig.operators && operators) {
         fieldConfig.operators = Array.from(new Set(operators));
-      if (!fieldConfig.defaultOperator && defaultOperator)
+      }
+      if (!fieldConfig.defaultOperator && defaultOperator) {
         fieldConfig.defaultOperator = defaultOperator;
+      }
     }
 
     const keysToPutInFieldSettings = ['listValues', 'allowCustomValues', 'validateValue'];
@@ -456,11 +465,13 @@ function _getWidgetsAndSrcsForFieldOp(config, field, operator = null, valueSrc =
       const widgetValueSrc = config.widgets[widget].valueSrc || 'value';
       let canAdd = true;
       if (!widgetConfig.operators) canAdd = canAdd && (valueSrc != 'value' || isFuncArg); // if can't check operators, don't add
-      if (widgetConfig.operators && operator)
+      if (widgetConfig.operators && operator) {
         canAdd = canAdd && widgetConfig.operators.indexOf(operator) != -1;
+      }
       if (valueSrc && valueSrc != widgetValueSrc) canAdd = false;
-      if (opConfig && opConfig.cardinality == 0 && widgetValueSrc != 'value')
+      if (opConfig && opConfig.cardinality == 0 && widgetValueSrc != 'value') {
         canAdd = false;
+      }
       if (canAdd) {
         widgets.push(widget);
         let canAddValueSrc =
@@ -470,10 +481,12 @@ function _getWidgetsAndSrcsForFieldOp(config, field, operator = null, valueSrc =
           opConfig &&
           opConfig.valueSources &&
           opConfig.valueSources.indexOf(widgetValueSrc) == -1
-        )
+        ) {
           canAddValueSrc = false;
-        if (canAddValueSrc && !valueSrcs.find((v) => v == widgetValueSrc))
+        }
+        if (canAddValueSrc && !valueSrcs.find((v) => v == widgetValueSrc)) {
           valueSrcs.push(widgetValueSrc);
+        }
       }
     }
   }

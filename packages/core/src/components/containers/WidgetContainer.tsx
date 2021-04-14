@@ -76,10 +76,12 @@ export default (Widget) => {
     _setValue = (isSpecialRange, delta, widgetType, value, __isInternal) => {
       if (isSpecialRange && Array.isArray(value)) {
         const oldRange = [this.props.value.get(0), this.props.value.get(1)];
-        if (oldRange[0] != value[0])
+        if (oldRange[0] != value[0]) {
           this.props.setValue(0, value[0], widgetType, __isInternal);
-        if (oldRange[1] != value[1])
+        }
+        if (oldRange[1] != value[1]) {
           this.props.setValue(1, value[1], widgetType, __isInternal);
+        }
       } else {
         this.props.setValue(delta, value, widgetType, __isInternal);
       }
@@ -366,8 +368,9 @@ const WidgetFactory = ({
         ? [immValueError.get(0), immValueError.get(1)]
         : immValueError.get(delta))) ||
     null;
-  if (isSpecialRange && value[0] === undefined && value[1] === undefined)
+  if (isSpecialRange && value[0] === undefined && value[1] === undefined) {
     value = undefined;
+  }
   const { fieldSettings } = fieldDefinition || {};
   const widgetProps = {
     ...fieldWidgetProps,
@@ -398,10 +401,11 @@ const WidgetFactory = ({
       return defaultValue ? widgetProps.labelYes || 'YES' : widgetProps.labelNo || 'NO';
     }
     if (fieldSettings.listValues) {
-      if (Array.isArray(defaultValue))
+      if (Array.isArray(defaultValue)) {
         return defaultValue
           .map((v) => getTitleInListValues(fieldSettings.listValues, v) || v)
           .join(', ');
+      }
       return getTitleInListValues(fieldSettings.listValues, defaultValue) || defaultValue;
     }
     return `${defaultValue}`;

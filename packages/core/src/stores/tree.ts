@@ -275,16 +275,18 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
     newSourceChildren = newSourceChildren.delete(from.get('id'));
   }
 
-  if (!isSameParent && !isSourceInsideTarget)
+  if (!isSameParent && !isSourceInsideTarget) {
     state = state.updateIn(
       expandTreePath(sourcePath, 'children1'),
       (_oldChildren) => newSourceChildren
     );
-  if (!isTargetInsideSource)
+  }
+  if (!isTargetInsideSource) {
     state = state.updateIn(
       expandTreePath(targetPath, 'children1'),
       (_oldChildren) => newTargetChildren
     );
+  }
 
   state = fixPathsInTree(state);
   return state;
@@ -373,12 +375,15 @@ const setField = (state, path, newField, config) => {
       else if (availOps && availOps.length > 1) {
         for (const strategy of setOpOnChangeField || []) {
           if (strategy == 'keep') newOperator = lastOp;
-          else if (strategy == 'default')
+          else if (strategy == 'default') {
             newOperator = defaultOperator(config, newField, false);
-          else if (strategy == 'first') newOperator = getFirstOperator(config, newField);
-          if (newOperator)
+          } else if (strategy == 'first') {
+            newOperator = getFirstOperator(config, newField);
+          }
+          if (newOperator) {
             // found op for strategy
             break;
+          }
         }
       }
 

@@ -114,8 +114,9 @@ const operators = {
       isForDisplay,
       fieldDef
     ) => {
-      if (valueTypes == 'boolean' && isForDisplay)
+      if (valueTypes == 'boolean' && isForDisplay) {
         return value == 'No' ? `NOT ${field}` : `${field}`;
+      }
       return `${field} ${opDef.label} ${value}`;
     },
     mongoFormatOp: mongoFormatOp1.bind(null, '$eq', (v) => v, false),
@@ -137,8 +138,9 @@ const operators = {
       isForDisplay,
       fieldDef
     ) => {
-      if (valueTypes == 'boolean' && isForDisplay)
+      if (valueTypes == 'boolean' && isForDisplay) {
         return value == 'No' ? `${field}` : `NOT ${field}`;
+      }
       return `${field} ${opDef.label} ${value}`;
     },
     mongoFormatOp: mongoFormatOp1.bind(null, '$ne', (v) => v, false),
@@ -450,9 +452,10 @@ const operators = {
       return `${field} == ${values}`;
     },
     sqlFormatOp: (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
-      if (valueSrc == 'value')
+      if (valueSrc == 'value') {
         // set
         return `${field} = '${values.map((v) => SqlString.trim(v)).join(',')}'`;
+      }
       return undefined; // not supported
     },
     mongoFormatOp: mongoFormatOp1.bind(null, '$eq', (v) => v, false),
@@ -481,9 +484,10 @@ const operators = {
       return `${field} != ${values}`;
     },
     sqlFormatOp: (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
-      if (valueSrc == 'value')
+      if (valueSrc == 'value') {
         // set
         return `${field} != '${values.map((v) => SqlString.trim(v)).join(',')}'`;
+      }
       return undefined; // not supported
     },
     mongoFormatOp: mongoFormatOp1.bind(null, '$ne', (v) => v, false),

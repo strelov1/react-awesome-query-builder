@@ -219,9 +219,10 @@ const mongodbFormatItem = (parents, item, config, meta, _not = false) => {
           return acc;
         }, {});
       }
-      if (!resultQuery)
+      if (!resultQuery) {
         // can't be shorten
         resultQuery = { [mongoConj]: rules };
+      }
     }
     if (field) {
       // format field

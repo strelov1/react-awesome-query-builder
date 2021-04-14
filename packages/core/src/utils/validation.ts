@@ -76,8 +76,9 @@ function validateGroup(item, path, itemId, meta, c) {
   children = children.map((currentChild, childId) =>
     validateItem(currentChild, path.concat(id), childId, submeta, c)
   );
-  if (removeEmptyGroups)
+  if (removeEmptyGroups) {
     children = children.filter((currentChild) => currentChild != undefined);
+  }
   let sanitized = submeta.sanitized || oldChildren.size != children.size;
   if (!children.size && removeEmptyGroups && path.length) {
     sanitized = true;
@@ -317,8 +318,9 @@ const validateNormalValue = (
   const { jsType } = wConfig;
   const { fieldSettings } = fieldConfig;
 
-  if (valueType != wType)
+  if (valueType != wType) {
     return [`Value should have type ${wType}, but got value of type ${valueType}`, value];
+  }
   if (jsType && !isTypeOf(value, jsType) && !fieldSettings.listValues) {
     // tip: can skip tye check for listValues
     return [
@@ -377,13 +379,15 @@ const validateFieldValue = (
   const rightFieldStr = Array.isArray(value) ? value.join(fieldSeparator) : value;
   const rightFieldDefinition = getFieldConfig(value, config);
   if (!rightFieldDefinition) return [`Unknown field ${value}`, value];
-  if (rightFieldStr == leftFieldStr)
+  if (rightFieldStr == leftFieldStr) {
     return [`Can't compare field ${leftField} with itself`, value];
-  if (valueType && valueType != rightFieldDefinition.type)
+  }
+  if (valueType && valueType != rightFieldDefinition.type) {
     return [
       `Field ${value} is of type ${rightFieldDefinition.type}, but expected ${valueType}`,
       value,
     ];
+  }
   return [null, value];
 };
 
@@ -408,11 +412,12 @@ const validateFuncValue = (
     if (funcKey) {
       const funcConfig = getFuncConfig(funcKey, config);
       if (funcConfig) {
-        if (valueType && funcConfig.returnType != valueType)
+        if (valueType && funcConfig.returnType != valueType) {
           return [
             `Function ${funcKey} should return value of type ${funcConfig.returnType}, but got ${valueType}`,
             value,
           ];
+        }
         for (const argKey in funcConfig.args) {
           const argConfig = funcConfig.args[argKey];
           const args = fixedValue.get('args');
@@ -546,8 +551,9 @@ export const getNewValueForFieldOp = function (
   if (
     currentOperator != newOperator &&
     [currentOperator, newOperator].includes('proximity')
-  )
+  ) {
     canReuseValue = false;
+  }
 
   const firstWidgetConfig = getFieldWidgetConfig(
     config,
@@ -613,10 +619,11 @@ export const getNewValueForFieldOp = function (
         else if (
           newFieldConfig.fieldSettings &&
           newFieldConfig.fieldSettings.defaultValue !== undefined
-        )
+        ) {
           v = newFieldConfig.fieldSettings.defaultValue;
-        else if (firstWidgetConfig.defaultValue !== undefined)
+        } else if (firstWidgetConfig.defaultValue !== undefined) {
           v = firstWidgetConfig.defaultValue;
+        }
       }
       return v;
     })

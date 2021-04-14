@@ -20,8 +20,9 @@ export const defaultOperator = (config, field, canGetFirst = true) => {
   const fieldOperators = (fieldConfig && fieldConfig.operators) || [];
   let fieldDefaultOperator = fieldConfig && fieldConfig.defaultOperator;
   if (!fieldOperators.includes(fieldDefaultOperator)) fieldDefaultOperator = null;
-  if (!fieldDefaultOperator && canGetFirst)
+  if (!fieldDefaultOperator && canGetFirst) {
     fieldDefaultOperator = getFirstOperator(config, field);
+  }
   const op =
     typeof config.settings.defaultOperator === 'function'
       ? config.settings.defaultOperator(field, fieldConfig)

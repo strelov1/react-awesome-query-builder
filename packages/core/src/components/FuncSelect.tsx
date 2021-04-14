@@ -82,7 +82,7 @@ export default class FuncSelect extends PureComponent<FuncSelectProps> {
     const selectedLabel = this.getFuncLabel(currFunc, selectedFuncKey, config);
     const partsLabels = getFuncPathLabels(selectedFuncKey, config);
     let selectedFullLabel = partsLabels ? partsLabels.join(fieldSeparatorDisplay) : null;
-    if (selectedFullLabel == selectedLabel) selectedFullLabel = null;
+    if (selectedFullLabel === selectedLabel) selectedFullLabel = null;
 
     return {
       placeholder,
@@ -120,9 +120,10 @@ export default class FuncSelect extends PureComponent<FuncSelectProps> {
           if (_filter(subfields, subpath) == 0) delete list[funcKey];
         } else {
           let canUse = funcConfig.returnType == expectedType;
-          if (leftFieldConfig.funcs)
+          if (leftFieldConfig.funcs) {
             canUse = canUse && leftFieldConfig.funcs.includes(funcFullkey);
-          if (canUseFuncForField)
+          }
+          if (canUseFuncForField) {
             canUse =
               canUse &&
               canUseFuncForField(
@@ -132,6 +133,7 @@ export default class FuncSelect extends PureComponent<FuncSelectProps> {
                 funcConfig,
                 operator
               );
+          }
           if (!canUse) delete list[funcKey];
         }
       }

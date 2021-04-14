@@ -432,14 +432,16 @@ export default (Builder, CanMoveFn = null) => {
                     (placement == constants.PLACEMENT_BEFORE ||
                       placement == constants.PLACEMENT_AFTER) &&
                     trg.parent == null
-                  )
+                  ) {
                     return false;
+                  }
                   if (
                     trg.collapsed &&
                     (placement == constants.PLACEMENT_APPEND ||
                       placement == constants.PLACEMENT_PREPEND)
-                  )
+                  ) {
                     return false;
+                  }
 
                   let isInside = trg.id == itemInfo.id;
                   if (!isInside) {
@@ -461,9 +463,9 @@ export default (Builder, CanMoveFn = null) => {
                   if (
                     placement == constants.PLACEMENT_APPEND ||
                     placement == constants.PLACEMENT_PREPEND
-                  )
+                  ) {
                     toParentII = toII;
-                  else toParentII = this.tree.items[toII.parent];
+                  } else toParentII = this.tree.items[toII.parent];
                   if (toParentII && toParentII.parent == null) toParentII = null;
                   am[3] = toParentII;
                   return am;
@@ -487,13 +489,15 @@ export default (Builder, CanMoveFn = null) => {
               const allLevs = levs.concat(curLev);
               let closestDragLev = null;
               if (allLevs.indexOf(dragLev) != -1) closestDragLev = dragLev;
-              else if (dragLev > Math.max(...allLevs))
+              else if (dragLev > Math.max(...allLevs)) {
                 closestDragLev = Math.max(...allLevs);
-              else if (dragLev < Math.min(...allLevs))
+              } else if (dragLev < Math.min(...allLevs)) {
                 closestDragLev = Math.min(...allLevs);
+              }
               bestMode = filteredMoves.find((am) => am[2] == closestDragLev);
-              if (!isSamePos && !bestMode && filteredMoves.length)
+              if (!isSamePos && !bestMode && filteredMoves.length) {
                 bestMode = filteredMoves[0];
+              }
               moveInfo = bestMode;
             }
           }
@@ -539,13 +543,14 @@ export default (Builder, CanMoveFn = null) => {
       if (isStructChange && (!canRegroup || isForbiddenStructChange)) return false;
 
       let res = true;
-      if (canMoveFn)
+      if (canMoveFn) {
         res = canMoveFn(
           fromII.node.toJS(),
           toII.node.toJS(),
           placement,
           toParentII ? toParentII.node.toJS() : null
         );
+      }
       return res;
     }
 

@@ -77,8 +77,9 @@ const jsonLogicFormatValue = (
         ? rightField.join(fieldSeparator)
         : rightField;
       ret = { var: rightFieldName };
-      if (meta.usedFields.indexOf(rightFieldName) == -1)
+      if (meta.usedFields.indexOf(rightFieldName) == -1) {
         meta.usedFields.push(rightFieldName);
+      }
     }
   } else if (valueSrc == 'func') {
     const funcKey = currentValue.get('func');
@@ -306,8 +307,9 @@ const jsonLogicFormatItem = (item, config, meta, isRoot, parentField = null) => 
 
     // format logic
     let formatteOp = operator;
-    if (typeof operatorDefinition.jsonLogic === 'string')
+    if (typeof operatorDefinition.jsonLogic === 'string') {
       formatteOp = operatorDefinition.jsonLogic;
+    }
     let fn =
       typeof operatorDefinition.jsonLogic === 'function'
         ? operatorDefinition.jsonLogic
@@ -316,11 +318,13 @@ const jsonLogicFormatItem = (item, config, meta, isRoot, parentField = null) => 
       const rangeOps = ['<', '<=', '>', '>='];
       fn = (field, op, val, opDef, opOpts) => {
         if (cardinality == 0) return { [formatteOp]: formattedField };
-        if (cardinality == 1 && isReverseArgs)
+        if (cardinality == 1 && isReverseArgs) {
           return { [formatteOp]: [formattedValue, formattedField] };
+        }
         if (cardinality == 1) return { [formatteOp]: [formattedField, formattedValue] };
-        if (cardinality == 2 && rangeOps.includes(formatteOp))
+        if (cardinality == 2 && rangeOps.includes(formatteOp)) {
           return { [formatteOp]: [formattedValue[0], formattedField, formattedValue[1]] };
+        }
         return { [formatteOp]: [formattedField, ...formattedValue] };
       };
     }

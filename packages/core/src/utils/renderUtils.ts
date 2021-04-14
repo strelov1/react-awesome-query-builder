@@ -12,12 +12,13 @@ export const liteShouldComponentUpdate = (self, config) => (nextProps, nextState
         let changed = nextProps[k] != prevProps[k];
         if (changed) {
           if (config[k] == 'ignore') changed = false;
-          else if (config[k] == 'shallow_deep')
+          else if (config[k] == 'shallow_deep') {
             changed = !shallowEqual(nextProps[k], prevProps[k], true);
-          else if (config[k] == 'shallow')
+          } else if (config[k] == 'shallow') {
             changed = !shallowEqual(nextProps[k], prevProps[k]);
-          else if (typeof config[k] === 'function')
+          } else if (typeof config[k] === 'function') {
             changed = config[k](nextProps[k], prevProps[k], nextState);
+          }
         }
         if (changed) chs.push(k);
       }

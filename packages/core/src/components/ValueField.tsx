@@ -134,7 +134,7 @@ export default class ValueField extends PureComponent {
             rightFieldConfig.type == expectedType &&
             rightFieldFullkey != leftFieldFullkey;
           const fn = canCompareFieldWithField || config.settings.canCompareFieldWithField;
-          if (fn)
+          if (fn) {
             canUse =
               canUse &&
               fn(
@@ -144,6 +144,7 @@ export default class ValueField extends PureComponent {
                 rightFieldConfig,
                 operator
               );
+          }
           if (!canUse) delete list[rightFieldKey];
         }
       }

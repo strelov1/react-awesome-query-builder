@@ -42,12 +42,13 @@ export default class DateWidget extends PureComponent {
 
   isValidValue = (value) => {
     const { isSpecialRange } = this.props;
-    if (isSpecialRange)
+    if (isSpecialRange) {
       return value
         ? value
             .map((el) => this.isValidSingleValue(el))
             .reduce((res, item) => res && item, true)
         : true;
+    }
     return this.isValidSingleValue(value);
   };
 
@@ -60,8 +61,9 @@ export default class DateWidget extends PureComponent {
 
   getMomentValue = (value) => {
     const { isSpecialRange } = this.props;
-    if (isSpecialRange)
+    if (isSpecialRange) {
       return value ? value.map((el) => this.getMomentSingleValue(el)) : [null, null];
+    }
     return this.getMomentSingleValue(value);
   };
 
@@ -72,10 +74,11 @@ export default class DateWidget extends PureComponent {
 
   formatValue = (value) => {
     const { isSpecialRange } = this.props;
-    if (isSpecialRange)
+    if (isSpecialRange) {
       return value
         ? value.map((el) => this.formatSingleValue(el))
         : [undefined, undefined];
+    }
     return this.formatSingleValue(value);
   };
 
