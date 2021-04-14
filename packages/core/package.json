@@ -1,6 +1,6 @@
 {
   "name": "@react-query-builder/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "src/index.ts",
   "author": "Ilya Strelov <strelov1@gmail.com> (https://github.com/strelov1)",
   "license": "MIT",
