@@ -1,7 +1,8 @@
-import MaterialWidgets from '../../components/widgets/material';
-import BasicConfig from '../basic';
 import React from 'react';
-import { SqlString } from '../../utils/sql';
+import { BasicConfig, Utils } from '@react-query-builder/core';
+import MaterialWidgets from '../components/widgets/material';
+
+const { SqlString } = Utils;
 
 const {
   MaterialBooleanWidget,

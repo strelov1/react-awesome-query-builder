@@ -5,10 +5,14 @@ import { getTreeBadFields, getLightTree } from '../utils/treeUtils';
 import { isJsonLogic } from '../utils/stuff';
 
 export const getTree = (immutableTree, light = true) => {
-  if (!immutableTree) return undefined;
+  if (!immutableTree) {
+    return undefined;
+  }
   let tree = immutableTree;
   tree = tree.toJS();
-  if (light) tree = getLightTree(tree);
+  if (light) {
+    tree = getLightTree(tree);
+  }
   return tree;
 };
 
@@ -25,7 +29,9 @@ export const loadTree = (serTree) => {
     throw 'You are trying to load query in obsolete serialization format (Immutable string) which is not supported in versions starting from 2.1.17';
   } else if (typeof serTree === 'string') {
     return jsTreeToImmutable(JSON.parse(serTree));
-  } else throw "Can't load tree!";
+  } else {
+    throw "Can't load tree!";
+  }
 };
 
 export const checkTree = (tree, config) => {
@@ -59,7 +65,11 @@ function jsTreeToImmutable(tree) {
         // only for raw values keep JS representation
         outValue = Immutable.List.of(valueJs);
       }
-    } else outValue = Immutable.Iterable.isIndexed(value) ? value.toList() : value.toOrderedMap();
+    } else {
+      outValue = Immutable.Iterable.isIndexed(value)
+        ? value.toList()
+        : value.toOrderedMap();
+    }
     return outValue;
   });
 }

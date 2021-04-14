@@ -1,9 +1,9 @@
-import en_US from 'antd/lib/locale-provider/en_US';
-import AntdWidgets from '../../components/widgets/antd';
-import BasicConfig from '../basic';
-import { getTitleInListValues } from '../../utils/stuff';
-import { SqlString } from '../../utils/sql';
 import React from 'react';
+import { BasicConfig, Utils } from '@react-query-builder/core';
+import en_US from 'antd/lib/locale-provider/en_US';
+import AntdWidgets from '../components/widgets';
+
+const { SqlString, getTitleInListValues } = Utils;
 
 const {
   FieldSelect,
@@ -125,8 +125,8 @@ const widgets = {
     valueLabel: 'Value',
     valuePlaceholder: 'Select value',
     formatValue: (val, fieldDef, wgtDef, isForDisplay) => {
-      let valLabel = getTitleInListValues(fieldDef.fieldSettings.listValues, val);
-      return isForDisplay ? '"' + valLabel + '"' : JSON.stringify(val);
+      const valLabel = getTitleInListValues(fieldDef.fieldSettings.listValues, val);
+      return isForDisplay ? `"${valLabel}"` : JSON.stringify(val);
     },
     sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
       return SqlString.escape(val);
@@ -137,15 +137,15 @@ const widgets = {
     type: 'treemultiselect',
     jsType: 'array',
     valueSrc: 'value',
-    factory: (props) => <TreeSelectWidget {...props} treeMultiple={true} />,
+    factory: (props) => <TreeSelectWidget {...props} treeMultiple />,
     valueLabel: 'Values',
     valuePlaceholder: 'Select values',
     formatValue: (vals, fieldDef, wgtDef, isForDisplay) => {
-      let valsLabels = vals.map((v) =>
+      const valsLabels = vals.map((v) =>
         getTitleInListValues(fieldDef.fieldSettings.listValues, v)
       );
       return isForDisplay
-        ? valsLabels.map((v) => '"' + v + '"')
+        ? valsLabels.map((v) => `"${v}"`)
         : vals.map((v) => JSON.stringify(v));
     },
     sqlFormatValue: (vals, fieldDef, wgtDef, op, opDef) => {
