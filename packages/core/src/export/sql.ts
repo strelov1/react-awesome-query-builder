@@ -165,6 +165,7 @@ const sqlFormatItem = (item, config, meta) => {
   }
   if (type === 'rule') {
     const field = properties.get('field');
+    const fieldFunc = properties.get('fieldFunc');
     const operator = properties.get('operator');
     const operatorOptions = properties.get('operatorOptions');
     if (field == null || operator == null) return undefined;
@@ -226,10 +227,16 @@ const sqlFormatItem = (item, config, meta) => {
       const _operator = operatorDefinition.sqlOp || operator;
       if (cardinality == 0) {
         fn = (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
+          if (fieldFunc) {
+            return `${fieldFunc}(${field}) ${_operator}`;
+          }
           return `${field} ${_operator}`;
         };
       } else if (cardinality == 1) {
         fn = (field, op, value, valueSrc, valueType, opDef, operatorOptions) => {
+          if (fieldFunc) {
+            return `${fieldFunc}(${field}) ${_operator} ${value}`;
+          }
           return `${field} ${_operator} ${value}`;
         };
       } else if (cardinality == 2) {
@@ -237,6 +244,9 @@ const sqlFormatItem = (item, config, meta) => {
         fn = (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
           const valFrom = values.first();
           const valTo = values.get(1);
+          if (fieldFunc) {
+            return `${fieldFunc}(${field})  ${_operator} ${valFrom} AND ${valTo}`;
+          }
           return `${field} ${_operator} ${valFrom} AND ${valTo}`;
         };
       }

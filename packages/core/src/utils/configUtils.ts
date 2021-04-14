@@ -229,9 +229,13 @@ export const getFieldRawConfig = (
 };
 
 export const getFuncConfig = (func, config) => {
-  if (!func) return null;
+  if (!func) {
+    return null;
+  }
   const funcConfig = getFieldRawConfig(func, config, 'funcs', 'subfields');
-  if (!funcConfig) return null; // throw new Error("Can't find func " + func + ", please check your config");
+  if (!funcConfig) {
+    return null; // throw new Error("Can't find func " + func + ", please check your config");
+  }
   return funcConfig;
 };
 

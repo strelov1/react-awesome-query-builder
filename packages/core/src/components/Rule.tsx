@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import Immutable from 'immutable';
 
 import RuleContainer from './containers/RuleContainer';
 import Draggable from './containers/Draggable';
@@ -34,6 +33,7 @@ const DragIcon = () => (
 
 type RuleProps = {
   selectedField?: string;
+  selectedFieldFunc?: string;
   selectedOperator?: string;
   operatorOptions?: any;
   config: any;
@@ -51,6 +51,7 @@ type RuleProps = {
   removeSelf?: () => void;
   setValue?: () => void;
   setValueSrc?: () => void;
+  setFieldFunc?: () => void;
   reordableNodesCnt?: number;
 };
 
@@ -150,7 +151,14 @@ class Rule extends PureComponent<RuleProps> {
   };
 
   render() {
-    const { config, valueError, selectedField, selectedOperator, value } = this.props;
+    const {
+      config,
+      valueError,
+      selectedField,
+      selectedFieldFunc,
+      selectedOperator,
+      value,
+    } = this.props;
     const {
       selectedFieldPartsLabels,
       selectedFieldWidgetConfig,
@@ -269,12 +277,9 @@ class Rule extends PureComponent<RuleProps> {
           key="values"
           field={selectedField}
           operator={selectedOperator}
-          value={new Immutable.Map({ value: selectedField })}
+          value={selectedFieldFunc}
           config={config}
-          setValue={(val) => {
-            console.log('val', val.toJS());
-            // this.props.setField(val);
-          }}
+          setValue={this.props.setFieldFunc}
           readonly={immutableValuesMode}
         />
       </Col>

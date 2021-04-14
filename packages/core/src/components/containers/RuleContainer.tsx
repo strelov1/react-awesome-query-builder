@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFieldConfig } from '../../utils/configUtils';
 import { pureShouldComponentUpdate } from '../../utils/renderUtils';
 
-export default (Rule) => {
-  class RuleContainer extends Component {
-    static propTypes = {
-      id: PropTypes.string.isRequired,
-      config: PropTypes.object.isRequired,
-      path: PropTypes.any.isRequired, // instanceOf(Immutable.List)
-      operator: PropTypes.string,
-      field: PropTypes.string,
-      actions: PropTypes.object.isRequired, // {removeRule: Funciton, setField, setOperator, setOperatorOption, setValue, setValueSrc, ...}
-      onDragStart: PropTypes.func,
-      value: PropTypes.any, // depends on widget
-      valueSrc: PropTypes.any,
-      valueError: PropTypes.any,
-      operatorOptions: PropTypes.object,
-      reordableNodesCnt: PropTypes.number,
-      parentField: PropTypes.string, // from RuleGroup
-      // connected:
-      dragging: PropTypes.object, // {id, x, y, w, h}
-      isDraggingTempo: PropTypes.bool,
-    };
+type RuleContainerProps = {
+  id: string;
+  config: any;
+  path: any;
+  operator?: string;
+  field?: string;
+  fieldFunc?: string;
+  actions: any; // {removeRule: Funciton, setField, setOperator, setOperatorOption, setValue, setValueSrc, ...}
+  onDragStart?: () => void;
+  value?: any; // depends on widget
+  valueSrc?: any;
+  valueError?: any;
+  operatorOptions?: any;
+  reordableNodesCnt?: number;
+  parentField?: string; // from RuleGroup
+  // connected:
+  dragging?: any;
+  isDraggingTempo?: boolean;
+};
 
+export default (Rule) => {
+  class RuleContainer extends Component<RuleContainerProps> {
     constructor(props) {
       super(props);
 
@@ -40,6 +40,10 @@ export default (Rule) => {
 
     setField = (field) => {
       this.props.actions.setField(this.props.path, field);
+    };
+
+    setFieldFunc = (fieldFunc) => {
+      this.props.actions.setFieldFunc(this.props.path, fieldFunc);
     };
 
     setOperator = (operator) => {
@@ -87,7 +91,6 @@ export default (Rule) => {
       const isDraggingMe = this.props.dragging.id == this.props.id;
       const fieldConfig = getFieldConfig(this.props.field, this.props.config);
       const { showErrorMessage } = this.props.config.settings;
-      const _isGroup = fieldConfig && fieldConfig.type == '!struct';
       const isInDraggingTempo = !isDraggingMe && this.props.isDraggingTempo;
 
       const { valueError } = this.props;
@@ -118,12 +121,14 @@ export default (Rule) => {
                 isDraggingTempo
                 dragging={this.props.dragging}
                 setField={this.dummyFn}
+                setFieldFunc={this.dummyFn}
                 setOperator={this.dummyFn}
                 setOperatorOption={this.dummyFn}
                 removeSelf={this.dummyFn}
                 setValue={this.dummyFn}
                 setValueSrc={this.dummyFn}
                 selectedField={this.props.field || null}
+                selectedFieldFunc={this.props.fieldFunc || null}
                 parentField={this.props.parentField || null}
                 selectedOperator={this.props.operator || null}
                 value={this.props.value || null}
@@ -143,6 +148,7 @@ export default (Rule) => {
               onDragStart={this.props.onDragStart}
               removeSelf={isInDraggingTempo ? this.dummyFn : this.removeSelf}
               setField={isInDraggingTempo ? this.dummyFn : this.setField}
+              setFieldFunc={isInDraggingTempo ? this.dummyFn : this.setFieldFunc}
               setOperator={isInDraggingTempo ? this.dummyFn : this.setOperator}
               setOperatorOption={
                 isInDraggingTempo ? this.dummyFn : this.setOperatorOption
@@ -150,6 +156,7 @@ export default (Rule) => {
               setValue={isInDraggingTempo ? this.dummyFn : this.setValue}
               setValueSrc={isInDraggingTempo ? this.dummyFn : this.setValueSrc}
               selectedField={this.props.field || null}
+              selectedFieldFunc={this.props.fieldFunc || null}
               parentField={this.props.parentField || null}
               selectedOperator={this.props.operator || null}
               value={this.props.value || null}

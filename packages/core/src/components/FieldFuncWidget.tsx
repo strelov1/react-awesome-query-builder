@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
+import { Map } from 'immutable';
+
 import FuncSelect from './FuncSelect';
-import { setFunc } from '../utils/funcUtils';
 import Col from './Col';
 
 type FuncWidgetProps = {
@@ -15,12 +16,12 @@ type FuncWidgetProps = {
 
 export default class FieldFuncWidget extends PureComponent<FuncWidgetProps> {
   setFunc = (funcKey) => {
-    this.props.setValue(this.props.value.set('func', funcKey));
+    this.props.setValue(funcKey);
   };
 
   renderFuncSelect = () => {
     const { config, field, operator, customProps, value, readonly } = this.props;
-    const funcKey = value ? value.get('func') : null;
+    const funcKey = value ? new Map().set('func', value).get('func') : null;
     const selectProps = {
       value: funcKey,
       setValue: this.setFunc,

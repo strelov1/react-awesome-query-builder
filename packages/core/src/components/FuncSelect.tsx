@@ -1,5 +1,4 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
 import clone from 'clone';
@@ -14,18 +13,17 @@ import {
 
 // tip: this.props.value - right value, this.props.field - left value
 
-export default class FuncSelect extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    field: PropTypes.string.isRequired,
-    operator: PropTypes.string.isRequired,
-    customProps: PropTypes.object,
-    value: PropTypes.string,
-    setValue: PropTypes.func.isRequired,
-    readonly: PropTypes.bool,
-  };
-
-  constructor(props) {
+type FuncSelectProps = {
+  config: any;
+  field: string;
+  operator: string;
+  customProps?: any;
+  value?: string;
+  setValue: () => void;
+  readonly?: boolean;
+};
+export default class FuncSelect extends PureComponent<FuncSelectProps> {
+  constructor(props: FuncSelectProps) {
     super(props);
     useOnPropsChanged(this);
 

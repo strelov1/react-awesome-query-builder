@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent, ReactElement } from 'react';
+
 import OperatorOptionsContainer from './containers/OperatorOptionsContainer';
 
+type OperatorOptionsProps = {
+  config: any;
+  name: string;
+  children?: ReactElement<any>;
+};
 @OperatorOptionsContainer
-export default class OperatorOptions extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
-  };
-
+export default class OperatorOptions extends PureComponent<OperatorOptionsProps> {
   render() {
+    const { name, children } = this.props;
     return (
-      <div className={`rule--operator rule--operator--${this.props.name.toUpperCase()}`}>
-        {this.props.children}
+      <div className={`rule--operator rule--operator--${name.toUpperCase()}`}>
+        {children}
       </div>
     );
   }

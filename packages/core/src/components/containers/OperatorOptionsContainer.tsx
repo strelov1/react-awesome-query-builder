@@ -1,25 +1,36 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+
 import { getOperatorConfig } from '../../utils/configUtils';
 
-export default (OperatorOptions) => {
-  return class OperatorOptionsContainer extends PureComponent {
-    static propTypes = {
-      config: PropTypes.object.isRequired,
-      operatorOptions: PropTypes.any.isRequired, // instanceOf(Immutable.Map)
-      selectedField: PropTypes.string.isRequired,
-      selectedOperator: PropTypes.string.isRequired,
-      readonly: PropTypes.bool,
-      // actions
-      setOperatorOption: PropTypes.func.isRequired,
-    };
+type OperatorOptionsContainerProps = {
+  config: any;
+  operatorOptions: any;
+  selectedField: string;
+  selectedOperator: string;
+  readonly?: boolean;
+  // actions
+  setOperatorOption: () => void;
+};
 
+export default (OperatorOptions) => {
+  return class OperatorOptionsContainer extends PureComponent<OperatorOptionsContainerProps> {
     render() {
-      if (!this.props.selectedOperator) return null;
+      const {
+        readonly,
+        config,
+        operatorOptions,
+        selectedOperator,
+        selectedField,
+        setOperatorOption,
+      } = this.props;
+
+      if (!selectedOperator) {
+        return null;
+      }
       const operatorDefinitions = getOperatorConfig(
-        this.props.config,
-        this.props.selectedOperator,
-        this.props.selectedField
+        config,
+        selectedOperator,
+        selectedField
       );
       if (typeof operatorDefinitions.options === 'undefined') {
         return null;
@@ -28,15 +39,15 @@ export default (OperatorOptions) => {
       const { factory: optionsFactory, ...optionsProps } = operatorDefinitions.options;
 
       return (
-        <OperatorOptions name={this.props.selectedOperator} config={this.props.config}>
+        <OperatorOptions name={selectedOperator} config={config}>
           {optionsFactory({
             ...optionsProps,
-            config: this.props.config,
-            field: this.props.selectedField,
-            operator: this.props.selectedOperator,
-            options: this.props.operatorOptions,
-            setOption: this.props.setOperatorOption,
-            readonly: this.props.readonly,
+            config,
+            field: selectedField,
+            operator: selectedOperator,
+            options: operatorOptions,
+            setOption: setOperatorOption,
+            readonly: readonly || false,
           })}
         </OperatorOptions>
       );

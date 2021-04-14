@@ -290,7 +290,16 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
   return state;
 };
 
-const setFieldTree = (state, path, newField, config) => {};
+const setFieldFunc = (state, path, fieldFunc, config) => {
+  console.log('setFieldFunc', path, fieldFunc);
+  // return state.setIn(expandTreePath(path, 'fieldFunc', fieldFunc), fieldFunc);
+
+  return state.updateIn(expandTreePath(path, 'properties'), (map) =>
+    map.withMutations((current) => {
+      return current.set('fieldFunc', fieldFunc);
+    })
+  );
+};
 
 /**
  * @param {Immutable.Map} state
@@ -758,6 +767,13 @@ export default (config) => {
           ...state,
           ...unset,
           tree: setField(state.tree, action.path, action.field, action.config),
+        };
+
+      case constants.SET_FIELD_FUNC:
+        return {
+          ...state,
+          ...unset,
+          tree: setFieldFunc(state.tree, action.path, action.field, action.config),
         };
 
       case constants.SET_OPERATOR:
