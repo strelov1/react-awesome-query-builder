@@ -17,8 +17,11 @@ export default (props) => {
 
   const onChange = (e) => {
     let val = e.target.value;
-    if (val === '' || val === null) val = undefined;
-    else val = Number(val);
+    if (val === '' || val === null) {
+      val = undefined;
+    } else {
+      val = Number(val);
+    }
     setValue(val);
   };
 

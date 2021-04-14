@@ -3,9 +3,9 @@
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 import { ElementType, ReactElement, Factory } from 'react';
 
-////////////////
+/// /////////////
 // common
-/////////////////
+/// //////////////
 
 type AnyObject = object;
 
@@ -75,9 +75,9 @@ export type JsonTree = JsonGroup;
 
 export type ImmutableTree = ImmutableMap<string, string | Object>;
 
-////////////////
+/// /////////////
 // Query, Builder, Utils, Config
-/////////////////
+/// //////////////
 
 export interface Utils {
   // export
@@ -129,9 +129,9 @@ export interface Config {
   funcs?: Funcs;
 }
 
-/////////////////
+/// //////////////
 // Widgets, WidgetProps
-/////////////////
+/// //////////////
 
 type FormatValue = (
   val: RuleValue,
@@ -199,7 +199,7 @@ export interface BaseWidget {
   formatValue: FormatValue;
   sqlFormatValue: SqlFormatValue;
   mongoFormatValue?: MongoFormatValue;
-  //obsolete:
+  // obsolete:
   validateValue?: ValidateValue;
 }
 export interface RangeableWidget extends BaseWidget {
@@ -213,7 +213,7 @@ export interface FieldWidget {
   valueLabel?: string;
   formatValue: FormatValue; // with rightFieldDef
   sqlFormatValue: SqlFormatValue; // with rightFieldDef
-  //obsolete:
+  // obsolete:
   validateValue?: ValidateValue;
 }
 
@@ -236,9 +236,9 @@ export type Widget =
   | BaseWidget;
 export type Widgets = TypedMap<Widget>;
 
-/////////////////
+/// //////////////
 // Conjunctions
-/////////////////
+/// //////////////
 
 type FormatConj = (
   children: ImmutableList<string>,
@@ -280,9 +280,9 @@ export interface ConjsProps {
   setNot(not: boolean): void;
 }
 
-/////////////////
+/// //////////////
 // Rule, Group
-/////////////////
+/// //////////////
 
 export interface ButtonProps {
   type: 'addRule' | 'addGroup' | 'delRule' | 'delGroup' | 'addRuleGroup' | 'delRuleGroup';
@@ -326,9 +326,9 @@ export interface RuleErrorProps {
   error: string;
 }
 
-/////////////////
+/// //////////////
 // Operators
-/////////////////
+/// //////////////
 
 type FormatOperator = (
   field: string,
@@ -403,7 +403,7 @@ interface BaseOperator {
 type UnaryOperator = BaseOperator;
 type BinaryOperator = BaseOperator;
 interface Operator2 extends BaseOperator {
-  //cardinality: 2
+  // cardinality: 2
   textSeparators: Array<string>;
   valueLabels: Array<string | { label: string; placeholder: string }>;
   isSpecialRange?: boolean;
@@ -414,9 +414,9 @@ interface OperatorProximity extends Operator2 {
 export type Operator = UnaryOperator | BinaryOperator | Operator2 | OperatorProximity;
 export type Operators = TypedMap<Operator>;
 
-/////////////////
+/// //////////////
 // Types
-/////////////////
+/// //////////////
 
 interface WidgetConfigForType {
   widgetProps?: Optional<Widget>;
@@ -431,9 +431,9 @@ interface Type {
 }
 export type Types = TypedMap<Type>;
 
-/////////////////
+/// //////////////
 // Fields
-/////////////////
+/// //////////////
 
 type FieldType = string | '!struct' | '!group';
 
@@ -510,7 +510,7 @@ interface ValueField extends BaseField {
   mainWidgetProps?: Optional<Widget>;
   hideForSelect?: boolean;
   hideForCompare?: boolean;
-  //obsolete - moved to FieldSettings
+  // obsolete - moved to FieldSettings
   listValues?: ListValues;
   allowCustomValues?: boolean;
 }
@@ -533,9 +533,9 @@ export type Field = SimpleField;
 type FieldOrGroup = FieldStruct | FieldGroup | Field;
 export type Fields = TypedMap<FieldOrGroup>;
 
-/////////////////
+/// //////////////
 // FieldProps
-/////////////////
+/// //////////////
 
 export type FieldItem = {
   items?: FieldItems;
@@ -565,9 +565,9 @@ export interface FieldProps {
   readonly?: boolean;
 }
 
-/////////////////
+/// //////////////
 // Settings
-/////////////////
+/// //////////////
 
 type ValueSourcesInfo = { [vs in ValueSource]?: { label: string; widget?: string } };
 type AntdPosition =
@@ -694,9 +694,9 @@ export type Settings = LocaleSettings &
   BehaviourSettings &
   OtherSettings;
 
-/////////////////
+/// //////////////
 // Funcs
-/////////////////
+/// //////////////
 
 type SqlFormatFunc = (formattedArgs: { [key: string]: string }) => string;
 type FormatFunc = (
@@ -734,9 +734,9 @@ export interface FuncArg extends ValueField {
 }
 export type Funcs = TypedMap<Func | FuncGroup>;
 
-/////////////////
+/// //////////////
 // BasicConfig
-/////////////////
+/// //////////////
 
 export interface BasicConfig extends Config {
   conjunctions: {
@@ -797,9 +797,9 @@ export interface BasicConfig extends Config {
   settings: Settings;
 }
 
-/////////////////
+/// //////////////
 // ReadyWidgets
-/////////////////
+/// //////////////
 
 type ConfirmFunc = (opts: ConfirmModalProps) => void;
 
@@ -882,11 +882,3 @@ export interface MaterialWidgets {
 }
 
 export type Dragging = { id: number; x: number; y: number; w: number; h: number };
-
-/////////////////
-
-export const Utils: Utils;
-export const Query: Query;
-export const Builder: Builder;
-export const BasicConfig: BasicConfig;
-export const Widgets: ReadyWidgets;

@@ -1,32 +1,35 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent, ReactElement } from 'react';
 import classNames from 'classnames';
+import { Dragging } from 'types';
 
-export default (className) => (GroupOrRule) => {
-  return class Draggable extends PureComponent {
-    static propTypes = {
-      isDraggingTempo: PropTypes.bool,
-      isDraggingMe: PropTypes.bool,
-      onDragStart: PropTypes.func,
-      dragging: PropTypes.object, // {id, x, y, w, h}
-    };
+type DraggableProps = {
+  id: number;
+  isDraggingTempo?: boolean;
+  isDraggingMe?: boolean;
+  onDragStart?: (id: number, dom: HTMLDivElement, e: React.SyntheticEvent) => void;
+  dragging: Dragging;
+};
 
-    constructor(props) {
+export default (className: string) => (GroupOrRule: ReactElement<any>) => {
+  return class Draggable extends PureComponent<DraggableProps> {
+    wrapper: React.RefObject<HTMLDivElement>;
+
+    constructor(props: DraggableProps) {
       super(props);
       this.wrapper = React.createRef();
     }
 
-    handleDraggerMouseDown = (e) => {
-      const nodeId = this.props.id;
-      const dom = this.wrapper.current;
+    handleDraggerMouseDown = (e: React.SyntheticEvent) => {
+      const dom = this.wrapper.current as HTMLDivElement;
+      const { id, onDragStart } = this.props;
 
-      if (this.props.onDragStart) {
-        this.props.onDragStart(nodeId, dom, e);
+      if (onDragStart) {
+        onDragStart(id, dom, e);
       }
     };
 
     render() {
-      const { isDraggingTempo, isDraggingMe, dragging, ...otherProps } = this.props;
+      const { id, isDraggingTempo, isDraggingMe, dragging, ...otherProps } = this.props;
 
       let styles = {};
       if (isDraggingMe && isDraggingTempo) {
@@ -45,7 +48,7 @@ export default (className) => (GroupOrRule) => {
       );
 
       return (
-        <div className={cn} style={styles} ref={this.wrapper} data-id={this.props.id}>
+        <div className={cn} style={styles} ref={this.wrapper} data-id={id}>
           <GroupOrRule
             handleDraggerMouseDown={this.handleDraggerMouseDown}
             isDraggingMe={isDraggingMe}

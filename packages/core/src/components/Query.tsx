@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 import pick from 'lodash/pick';
+import { Config, ImmutableTree } from 'types';
 import createTreeStore from '../stores/tree';
 import * as actions from '../actions';
 import { extendConfig } from '../utils/configUtils';
@@ -11,7 +12,7 @@ import {
   bindActionCreators,
   shallowEqual,
   immutableEqual,
-  useOnPropsChanged,
+  onPropsChanged,
 } from '../utils/stuff';
 import { validateTree } from '../utils/validation';
 import { defaultRoot } from '../utils/defaultUtils';
@@ -33,18 +34,16 @@ const validateAndFixTree = (newTree, _oldTree, newConfig, oldConfig) => {
   return tree;
 };
 
-class Query extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    onChange: PropTypes.func,
-    renderBuilder: PropTypes.func,
-    tree: PropTypes.any, // instanceOf(Immutable.Map)
-    // dispatch: PropTypes.func.isRequired,
-  };
-
-  constructor(props) {
+type QueryProps = {
+  config: Config;
+  onChange?: () => void;
+  renderBuilder: () => void;
+  tree: ImmutableTree;
+};
+class Query extends PureComponent<QueryProps> {
+  constructor(props: QueryProps) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this._updateActions(props);
 
@@ -123,7 +122,7 @@ export default class QueryContainer extends Component {
 
   constructor(props, context) {
     super(props, context);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     const config = pick(props, configKeys);
     const extendedConfig = extendConfig(config);

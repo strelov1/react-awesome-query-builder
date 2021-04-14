@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Map } from 'immutable';
+import { Config } from 'types';
 
 import FuncSelect from './FuncSelect';
 import Col from './Col';
 
 type FuncWidgetProps = {
-  config: any;
+  config: Config;
   field: string;
   operator: any;
   customProps?: any;

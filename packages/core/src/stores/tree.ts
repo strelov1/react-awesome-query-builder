@@ -293,9 +293,6 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
 };
 
 const setFieldFunc = (state, path, fieldFunc, config) => {
-  console.log('setFieldFunc', path, fieldFunc);
-  // return state.setIn(expandTreePath(path, 'fieldFunc', fieldFunc), fieldFunc);
-
   return state.updateIn(expandTreePath(path, 'properties'), (map) =>
     map.withMutations((current) => {
       return current.set('fieldFunc', fieldFunc);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasicConfig, Utils } from '@react-query-builder/core';
-import MaterialWidgets from '../components/widgets/material';
+import MaterialWidgets from '../components/index';
 
 const { SqlString } = Utils;
 

@@ -2,7 +2,8 @@ import { PureComponent } from 'react';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
 import clone from 'clone';
-import { truncateString, useOnPropsChanged } from '../utils/stuff';
+import { Config } from 'types';
+import { truncateString, onPropsChanged } from '../utils/stuff';
 import {
   getFieldConfig,
   getFieldPath,
@@ -14,7 +15,7 @@ import {
 
 type ValueFieldProps = {
   setValue: () => void;
-  config: any;
+  config: Config;
   field: string;
   value?: string;
   operator?: string;
@@ -24,7 +25,7 @@ type ValueFieldProps = {
 export default class ValueField extends PureComponent<ValueFieldProps> {
   constructor(props) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

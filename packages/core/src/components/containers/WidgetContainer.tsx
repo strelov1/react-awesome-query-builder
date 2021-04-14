@@ -1,8 +1,9 @@
-import React, { Component, PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent, ReactElement } from 'react';
 import range from 'lodash/range';
 import pick from 'lodash/pick';
 import Immutable from 'immutable';
+import { Config } from 'types';
+
 import {
   getFieldConfig,
   getValueLabel,
@@ -12,33 +13,33 @@ import {
   getFieldWidgetConfig,
   getWidgetsForFieldOp,
 } from '../../utils/configUtils';
-import { getTitleInListValues, defaultValue, useOnPropsChanged } from '../../utils/stuff';
+import { getTitleInListValues, defaultValue, onPropsChanged } from '../../utils/stuff';
 
 const funcArgDummyOpDef = { cardinality: 1 };
 
-export default (Widget) => {
-  return class WidgetContainer extends PureComponent {
-    static propTypes = {
-      config: PropTypes.object.isRequired,
-      value: PropTypes.any, // instanceOf(Immutable.List)
-      valueSrc: PropTypes.any, // instanceOf(Immutable.List)
-      valueError: PropTypes.any,
-      field: PropTypes.string,
-      operator: PropTypes.string,
-      readonly: PropTypes.bool,
-      // actions
-      setValue: PropTypes.func,
-      setValueSrc: PropTypes.func,
-      // for isFuncArg
-      isFuncArg: PropTypes.bool,
-      fieldFunc: PropTypes.string,
-      fieldArg: PropTypes.string,
-      leftField: PropTypes.string,
-    };
+type WidgetContainerProps = {
+  config: Config;
+  value?: any; // instanceOf(Immutable.List)
+  valueSrc?: any; // instanceOf(Immutable.List)
+  valueError?: any;
+  field?: string;
+  operator?: string;
+  readonly?: boolean;
+  // actions
+  setValue: () => void;
+  setValueSrc: () => void;
+  // for isFuncArg
+  isFuncArg?: boolean;
+  fieldFunc?: string;
+  fieldArg?: string;
+  leftField?: string;
+};
 
-    constructor(props) {
+export default (Widget: ReactElement<any>) => {
+  return class WidgetContainer extends PureComponent<WidgetContainerProps> {
+    constructor(props: WidgetContainerProps) {
       super(props);
-      useOnPropsChanged(this);
+      onPropsChanged(this);
 
       this.onPropsChanged(props);
     }
@@ -239,7 +240,9 @@ export default (Widget) => {
         readonly,
       } = this.props;
       const { meta } = this;
-      if (!meta) return null;
+      if (!meta) {
+        return null;
+      }
       const { defaultWidget, cardinality, valueSources, widgets, _values, _field } = meta;
       const value = isFuncArg ? _values : values;
       const field = isFuncArg ? leftField : _field;

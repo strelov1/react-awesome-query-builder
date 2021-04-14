@@ -10,7 +10,7 @@ import {
   getOperatorConfig,
   getFieldWidgetConfig,
 } from '../utils/configUtils';
-import { useOnPropsChanged } from '../utils/stuff';
+import { onPropsChanged } from '../utils/stuff';
 import OperatorWrapper from './OperatorWrapper';
 import Col from './Col';
 import FieldWrapper from './FieldWrapper';
@@ -61,7 +61,7 @@ type RuleProps = {
 class Rule extends PureComponent<RuleProps> {
   constructor(props: RuleProps) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

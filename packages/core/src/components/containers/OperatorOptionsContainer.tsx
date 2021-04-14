@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactElement } from 'react';
 
 import { getOperatorConfig } from '../../utils/configUtils';
 
@@ -12,7 +12,7 @@ type OperatorOptionsContainerProps = {
   setOperatorOption: () => void;
 };
 
-export default (OperatorOptions) => {
+export default (OperatorOptions: ReactElement<any>) => {
   return class OperatorOptionsContainer extends PureComponent<OperatorOptionsContainerProps> {
     render() {
       const {

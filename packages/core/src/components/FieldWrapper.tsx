@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
+import { Config } from 'types';
 
 import Col from './Col';
 import Field from './Field';
 
 type FieldWrapperProps = {
-  config: any;
+  config: Config;
   selectedField?: string;
   parentField?: string;
   setField: () => void;

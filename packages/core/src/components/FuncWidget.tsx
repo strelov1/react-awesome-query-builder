@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
+import { Config } from 'types';
+
 import FuncSelect from './FuncSelect';
 import { getFuncConfig } from '../utils/configUtils';
 import ArgWidget from './ArgWidget';
 import { setFunc, setArgValue, setArgValueSrc } from '../utils/funcUtils';
-import { useOnPropsChanged } from '../utils/stuff';
+import { onPropsChanged } from '../utils/stuff';
 import Col from './Col';
 
 type FuncWidgetProps = {
-  config: any;
+  config: Config;
   field: string;
   operator: any;
   customProps?: any;
@@ -19,7 +21,7 @@ type FuncWidgetProps = {
 export default class FuncWidget extends PureComponent<FuncWidgetProps> {
   constructor(props: FuncWidgetProps) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

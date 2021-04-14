@@ -2,7 +2,6 @@ import { Map } from 'immutable';
 import { defaultValue } from '../utils/stuff';
 import { getFieldConfig, getOperatorConfig } from '../utils/configUtils';
 import { defaultConjunction } from '../utils/defaultUtils';
-import { completeValue } from '../utils/funcUtils';
 
 /*
  Build tree to http://querybuilder.js.org/ like format
@@ -103,7 +102,9 @@ const _queryBuilderFormat = (item, config, meta) => {
 
     if (value.size < cardinality) return undefined;
 
-    if (meta.usedFields.indexOf(field) == -1) meta.usedFields.push(field);
+    if (meta.usedFields.indexOf(field) == -1) {
+      meta.usedFields.push(field);
+    }
     value = value.toArray();
     valueSrc = valueSrc.toArray();
     valueType = valueType.toArray();
@@ -116,11 +117,15 @@ const _queryBuilderFormat = (item, config, meta) => {
       values.push(val);
       if (valueSrc[i] == 'field') {
         const secondField = value[i];
-        if (meta.usedFields.indexOf(secondField) == -1) meta.usedFields.push(secondField);
+        if (meta.usedFields.indexOf(secondField) == -1) {
+          meta.usedFields.push(secondField);
+        }
       }
     }
     let operatorOptions = options ? options.toJS() : null;
-    if (operatorOptions && !Object.keys(operatorOptions).length) operatorOptions = null;
+    if (operatorOptions && !Object.keys(operatorOptions).length) {
+      operatorOptions = null;
+    }
 
     const ruleQuery = {
       id,
@@ -129,7 +134,9 @@ const _queryBuilderFormat = (item, config, meta) => {
       input: typeConfig.mainWidget,
       operator,
     };
-    if (operatorOptions) ruleQuery.operatorOptions = operatorOptions;
+    if (operatorOptions) {
+      ruleQuery.operatorOptions = operatorOptions;
+    }
     ruleQuery.values = values;
     return ruleQuery;
   }

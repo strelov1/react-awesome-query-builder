@@ -14,17 +14,18 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
-  "rules": {
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "react/prop-types": "off",
-    "curly": "error"
-  },
   "settings": {
     "react": {
       "pragma": "React",
       "version": "detect"
     }
   },
-  "ignorePatterns": ["**/node_modules/*", "webpack.config.js"]
+  "ignorePatterns": ["**/node_modules/*", "webpack.config.js"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "curly": "error",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }

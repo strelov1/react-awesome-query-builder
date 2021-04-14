@@ -4,7 +4,6 @@
   "main": "src/index.ts",
   "author": "Ilya Strelov <strelov1@gmail.com> (https://github.com/strelov1)",
   "license": "MIT",
-  "types": "index.d.ts",
   "publishConfig": {
     "access": "public"
   },

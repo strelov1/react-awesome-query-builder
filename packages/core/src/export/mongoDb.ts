@@ -22,7 +22,9 @@ export const mongodbFormat = (tree, config) => {
 
   const res = mongodbFormatItem([], tree, config, meta);
 
-  if (meta.errors.length) console.warn('Errors while exporting to MongoDb:', meta.errors);
+  if (meta.errors.length) {
+    console.warn('Errors while exporting to MongoDb:', meta.errors);
+  }
   return res;
 };
 

@@ -1,11 +1,12 @@
 import { PureComponent } from 'react';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
+import { Config } from 'types';
 import { getFieldConfig, getFieldPath, getFieldPathLabels } from '../utils/configUtils';
-import { truncateString, useOnPropsChanged } from '../utils/stuff';
+import { truncateString, onPropsChanged } from '../utils/stuff';
 
 type FieldProps = {
-  config: any;
+  config: Config;
   selectedField?: string;
   parentField?: string;
   customProps?: any;
@@ -14,9 +15,9 @@ type FieldProps = {
   setField: () => void;
 };
 export default class Field extends PureComponent<FieldProps> {
-  constructor(props) {
+  constructor(props: FieldProps) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

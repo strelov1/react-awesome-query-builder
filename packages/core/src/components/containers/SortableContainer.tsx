@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import clone from 'clone';
-import PropTypes from 'prop-types';
+import { ImmutableTree } from 'types';
+
 import { getFlatTree } from '../../utils/treeUtils';
 import * as constants from '../../constants';
 import * as actions from '../../actions';
 import { pureShouldComponentUpdate } from '../../utils/renderUtils';
-import { useOnPropsChanged } from '../../utils/stuff';
+import { onPropsChanged } from '../../utils/stuff';
 
-const isDev = () => process && process.env && process.env.NODE_ENV == 'development';
+type SortableContainerProps = {
+  tree: ImmutableTree;
+  actions: any;
+  // ... see Builder
+};
 
 export default (Builder, CanMoveFn = null) => {
-  class SortableContainer extends Component {
-    static propTypes = {
-      tree: PropTypes.any.isRequired, // instanceOf(Immutable.Map)
-      actions: PropTypes.object.isRequired, // {moveItem: Function, ..}
-      // ... see Builder
-    };
-
-    constructor(props) {
+  class SortableContainer extends Component<SortableContainerProps> {
+    constructor(props: SortableContainerProps) {
       super(props);
-      useOnPropsChanged(this);
+      onPropsChanged(this);
 
       this.onPropsChanged(props);
     }
@@ -507,14 +506,6 @@ export default (Builder, CanMoveFn = null) => {
       if (moveInfo) {
         this.move(itemInfo, moveInfo[1], moveInfo[0], moveInfo[3]);
 
-        // if (isDev())  console.log("DRAG-N-DROP", JSON.stringify({
-        //   dragRect,
-        //   plhRect,
-        //   treeRect,
-        //   hovRect,
-        //   startMousePos: dragInfo.startMousePos,
-        //   mousePos: dragInfo.mousePos,
-        // }));
         return true;
       }
 
@@ -555,7 +546,6 @@ export default (Builder, CanMoveFn = null) => {
     }
 
     move(fromII, toII, placement, toParentII) {
-      // if (isDev())  console.log("move", fromII, toII, placement, toParentII);
       this.props.actions.moveItem(fromII.path, toII.path, placement);
     }
 

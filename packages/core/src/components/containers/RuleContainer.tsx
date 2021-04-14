@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { Config, Dragging } from 'types';
+
 import { getFieldConfig } from '../../utils/configUtils';
 import { pureShouldComponentUpdate } from '../../utils/renderUtils';
 
 type RuleContainerProps = {
   id: string;
-  config: any;
+  config: Config;
   path: any;
   operator?: string;
   field?: string;
@@ -20,13 +22,13 @@ type RuleContainerProps = {
   reordableNodesCnt?: number;
   parentField?: string; // from RuleGroup
   // connected:
-  dragging?: any;
+  dragging?: Dragging;
   isDraggingTempo?: boolean;
 };
 
-export default (Rule) => {
+export default (Rule: ReactElement<any>) => {
   class RuleContainer extends Component<RuleContainerProps> {
-    constructor(props) {
+    constructor(props: RuleContainerProps) {
       super(props);
 
       this.dummyFn.isDummyFn = true;

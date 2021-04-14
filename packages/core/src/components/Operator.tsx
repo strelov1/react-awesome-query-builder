@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
 import pickBy from 'lodash/pickBy';
 import mapValues from 'lodash/mapValues';
 import { getFieldConfig, getOperatorConfig } from '../utils/configUtils';
-import { useOnPropsChanged } from '../utils/stuff';
+import { onPropsChanged } from '../utils/stuff';
 
 export default class Operator extends PureComponent {
   static propTypes = {
@@ -18,7 +18,7 @@ export default class Operator extends PureComponent {
 
   constructor(props) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

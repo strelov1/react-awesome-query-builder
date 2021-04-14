@@ -2,7 +2,8 @@ import { PureComponent } from 'react';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
 import clone from 'clone';
-import { truncateString, useOnPropsChanged } from '../utils/stuff';
+import { Config } from 'types';
+import { truncateString, onPropsChanged } from '../utils/stuff';
 import {
   getFieldConfig,
   getFuncConfig,
@@ -14,7 +15,7 @@ import {
 // tip: this.props.value - right value, this.props.field - left value
 
 type FuncSelectProps = {
-  config: any;
+  config: Config;
   field: string;
   operator: string;
   customProps?: any;
@@ -25,7 +26,7 @@ type FuncSelectProps = {
 export default class FuncSelect extends PureComponent<FuncSelectProps> {
   constructor(props: FuncSelectProps) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
 
     this.onPropsChanged(props);
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import GroupContainer from './containers/GroupContainer';
 import Draggable from './containers/Draggable';
 import { RuleGroupActions } from './RuleGroupActions';
-import { useOnPropsChanged } from '../utils/stuff';
+import { onPropsChanged } from '../utils/stuff';
 import FieldWrapper from './FieldWrapper';
 import { Group } from './Group';
 
@@ -19,7 +19,7 @@ class RuleGroup extends Group {
 
   constructor(props) {
     super(props);
-    useOnPropsChanged(this);
+    onPropsChanged(this);
     this.onPropsChanged(props);
   }
 

@@ -1,24 +1,23 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent, ReactElement } from 'react';
+import { Config } from 'types';
 import WidgetContainer from './containers/WidgetContainer';
+import Col from './Col';
 
-const Col = ({ children, ...props }) => <div {...props}>{children}</div>;
-
+type WidgetProps = {
+  config: Config;
+  name: string;
+  children?: ReactElement<any>;
+};
 @WidgetContainer
-export default class Widget extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
-  };
-
+export default class Widget extends PureComponent<WidgetProps> {
   render() {
+    const { name, children } = this.props;
     return (
       <Col
-        className={`rule--widget rule--widget--${this.props.name.toUpperCase()}`}
-        key={`widget-col-${this.props.name}`}
+        className={`rule--widget rule--widget--${name.toUpperCase()}`}
+        key={`widget-col-${name}`}
       >
-        {this.props.children}
+        {children}
       </Col>
     );
   }

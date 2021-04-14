@@ -1,33 +1,32 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, ReactElement } from 'react';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
+import { Config, Dragging } from 'types';
 import { pureShouldComponentUpdate } from '../../utils/renderUtils';
-import { useOnPropsChanged } from '../../utils/stuff';
+import { onPropsChanged } from '../../utils/stuff';
 
-export default (Group) => {
-  class GroupContainer extends Component {
-    static propTypes = {
-      // tree: PropTypes.instanceOf(Immutable.Map).isRequired,
-      config: PropTypes.object.isRequired,
-      actions: PropTypes.object.isRequired, // {setConjunction: Funciton, removeGroup, addGroup, addRule, ...}
-      path: PropTypes.any.isRequired, // instanceOf(Immutable.List)
-      id: PropTypes.string.isRequired,
-      not: PropTypes.bool,
-      conjunction: PropTypes.string,
-      children1: PropTypes.any, // instanceOf(Immutable.OrderedMap)
-      onDragStart: PropTypes.func,
-      reordableNodesCnt: PropTypes.number,
-      selectedField: PropTypes.string, // for RuleGroup
-      parentField: PropTypes.string, // from RuleGroup
-      // connected:
-      dragging: PropTypes.object, // {id, x, y, w, h}
-      isDraggingTempo: PropTypes.bool,
-    };
+type GroupContainerProps = {
+  config: Config;
+  actions: any;
+  path: any;
+  id: string;
+  not?: boolean;
+  conjunction?: string;
+  children1?: any; // instanceOf(Immutable.OrderedMap)
+  onDragStart?: () => void;
+  reordableNodesCnt?: number;
+  selectedField?: string; // for RuleGroup
+  parentField?: string; // from RuleGroup
+  // connected:
+  dragging?: Dragging;
+  isDraggingTempo?: boolean;
+};
 
-    constructor(props) {
+export default (Group: ReactElement<any>) => {
+  class GroupContainer extends Component<GroupContainerProps> {
+    constructor(props: GroupContainerProps) {
       super(props);
-      useOnPropsChanged(this);
+      onPropsChanged(this);
 
       this.conjunctionOptions = this._getConjunctionOptions(props);
       this.dummyFn.isDummyFn = true;
