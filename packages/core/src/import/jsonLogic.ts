@@ -8,18 +8,18 @@ import { defaultConjunction, defaultGroupConjunction } from '../utils/defaultUti
 // http://jsonlogic.com/
 
 // helpers
-Object.defineProperty(Array.prototype, 'uniq', {
-  enumerable: false,
-  value() {
-    return Array.from(new Set(this));
-  },
-});
-Object.defineProperty(Array.prototype, 'to_object', {
-  enumerable: false,
-  value() {
-    return this.reduce((acc, [f, fc]) => ({ ...acc, [f]: fc }), {});
-  },
-});
+// Object.defineProperty(Array.prototype, 'uniq', {
+//   enumerable: false,
+//   value() {
+//     return Array.from(new Set(this));
+//   },
+// });
+// Object.defineProperty(Array.prototype, 'to_object', {
+//   enumerable: false,
+//   value() {
+//     return this.reduce((acc, [f, fc]) => ({ ...acc, [f]: fc }), {});
+//   },
+// });
 
 // meta is mutable
 export const loadFromJsonLogic = (logicTree, config) => {

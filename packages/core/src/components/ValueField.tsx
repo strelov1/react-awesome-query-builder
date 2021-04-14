@@ -1,5 +1,4 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { PureComponent } from 'react';
 import last from 'lodash/last';
 import keys from 'lodash/keys';
 import clone from 'clone';
@@ -13,17 +12,16 @@ import {
 
 // tip: this.props.value - right value, this.props.field - left value
 
-export default class ValueField extends PureComponent {
-  static propTypes = {
-    setValue: PropTypes.func.isRequired,
-    config: PropTypes.object.isRequired,
-    field: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    operator: PropTypes.string,
-    customProps: PropTypes.object,
-    readonly: PropTypes.bool,
-  };
-
+type ValueFieldProps = {
+  setValue: () => void;
+  config: any;
+  field: string;
+  value?: string;
+  operator?: string;
+  customProps?: any;
+  readonly?: boolean;
+};
+export default class ValueField extends PureComponent<ValueFieldProps> {
   constructor(props) {
     super(props);
     useOnPropsChanged(this);

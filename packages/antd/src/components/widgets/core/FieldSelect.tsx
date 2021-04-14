@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Tooltip, Select } from 'antd';
-import PropTypes from 'prop-types';
 import keys from 'lodash/keys';
 import {
   BUILT_IN_PLACEMENTS,
@@ -10,24 +9,24 @@ import {
 
 const { Option, OptGroup } = Select;
 
-export default class FieldSelect extends PureComponent {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    customProps: PropTypes.object,
-    items: PropTypes.array.isRequired,
-    placeholder: PropTypes.string,
-    selectedKey: PropTypes.string,
-    selectedKeys: PropTypes.array,
-    selectedPath: PropTypes.array,
-    selectedLabel: PropTypes.string,
-    selectedAltLabel: PropTypes.string,
-    selectedFullLabel: PropTypes.string,
-    selectedOpts: PropTypes.object,
-    readonly: PropTypes.bool,
-    // actions
-    setField: PropTypes.func.isRequired,
-  };
+type FieldSelectProps = {
+  config: any;
+  customProps?: any;
+  items: Array<any>;
+  placeholder?: string;
+  selectedKey?: string;
+  selectedKeys?: Array<any>;
+  selectedPath?: Array<any>;
+  selectedLabel?: string;
+  selectedAltLabel?: string;
+  selectedFullLabel?: string;
+  selectedOpts?: any;
+  readonly?: boolean;
+  // actions
+  setField: () => void;
+};
 
+export default class FieldSelect extends PureComponent<FieldSelectProps> {
   onChange = (key) => {
     this.props.setField(key);
   };

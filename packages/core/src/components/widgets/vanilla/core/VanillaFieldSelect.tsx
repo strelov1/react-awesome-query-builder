@@ -22,9 +22,14 @@ export default ({ items, setField, selectedKey, readonly }) => {
   const onChange = (e) => setField(e.target.value);
 
   const hasValue = selectedKey != null;
+
+  const renderEmptyOption = () => {
+    return <option value="" />;
+  };
+
   return (
     <select onChange={onChange} value={hasValue ? selectedKey : ''} disabled={readonly}>
-      {!hasValue && <option disabled value="" />}
+      {renderEmptyOption()}
       {renderOptions(items)}
     </select>
   );
