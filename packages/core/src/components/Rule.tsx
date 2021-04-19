@@ -287,7 +287,7 @@ class Rule extends PureComponent<RuleProps> {
 
     const fullWidget = [beforeWidget, widget, afterWidget];
 
-    const parts = [filedFuncWidget, field, operator, ...fullWidget, operatorOptions];
+    const parts = [field, filedFuncWidget, operator, ...fullWidget, operatorOptions];
 
     const drag = showDragIcon && (
       <span
@@ -295,7 +295,7 @@ class Rule extends PureComponent<RuleProps> {
         className="qb-drag-handler rule--drag-handler"
         onMouseDown={this.props.handleDraggerMouseDown}
       >
-        <DragIcon />{' '}
+        <DragIcon />
       </span>
     );
     const del = (

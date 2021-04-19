@@ -11,6 +11,10 @@ const config = {
       label: 'test',
       type: 'text',
     },
+    longValue: {
+      label: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since t',
+      type: 'text',
+    },
   },
   funcs: {
     LOWER: {

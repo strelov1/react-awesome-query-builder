@@ -403,6 +403,10 @@ div.tooltip-inner {
   }
 }
 
+.rule--field select {
+  max-width: 150px;
+}
+
 /******************************************************************************/
 /** CONJUNCTION ***************************************************************/
 /******************************************************************************/
@@ -473,7 +477,7 @@ $rule_func_items: '.rule--func--wrapper', '.rule--func', '.rule--func--args',
 }
 
 .rule--func {
-  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .rule--func--bracket-before,
@@ -556,7 +560,7 @@ $rule_func_items: '.rule--func--wrapper', '.rule--func', '.rule--func--args',
   }
 }
 
-$group_actions: '.group--drag-handler', '.group--actions';
+$group_actions: '.group--drag-handler';
 $inactive_conjs: '.group--conjunctions .ant-btn:not(.ant-btn-primary)';
 $active_conjs: '.group--conjunctions .ant-btn.ant-btn-primary';
 $rule_actions: '.widget--valuesrc', '.rule--drag-handler', '.rule--header';
