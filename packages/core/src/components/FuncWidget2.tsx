@@ -4,7 +4,13 @@ import { Config } from 'types';
 import FuncSelect from './FuncSelect';
 import { getFuncConfig } from '../utils/configUtils';
 import ArgWidget from './ArgWidget';
-import { setFunc, setArgValue, setArgValueSrc } from '../utils/funcUtils';
+import {
+  setLeftFunc,
+  setArgValue,
+  setArgValueSrc,
+  setLeftArgValue,
+  setLeftArgValueSrc,
+} from '../utils/funcUtils';
 import { onPropsChanged } from '../utils/stuff';
 import Col from './Col';
 
@@ -18,7 +24,7 @@ type FuncWidgetProps = {
   readonly?: boolean;
 };
 
-export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
+export default class FuncWidget extends PureComponent<FuncWidgetProps> {
   constructor(props: FuncWidgetProps) {
     super(props);
     onPropsChanged(this);
@@ -39,7 +45,7 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
   }
 
   getMeta({ config, field, operator, value }) {
-    const funcKey = value ? value.get('func') : null;
+    const funcKey = value ? value.get('leftFunc') : null;
     const funcDefinition = funcKey ? getFuncConfig(funcKey, config) : null;
 
     return {
@@ -49,20 +55,20 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
   }
 
   setFunc = (funcKey) => {
-    this.props.setValue(setFunc(this.props.value, funcKey, this.props.config));
+    this.props.setValue(setLeftFunc(this.props.value, funcKey, this.props.config));
   };
 
   setArgValue = (argKey, argVal) => {
-    this.props.setValue(setArgValue(this.props.value, argKey, argVal));
+    this.props.setValue(setLeftArgValue(this.props.value, argKey, argVal));
   };
 
   setArgValueSrc = (argKey, argValSrc) => {
-    this.props.setValue(setArgValueSrc(this.props.value, argKey, argValSrc));
+    this.props.setValue(setLeftArgValueSrc(this.props.value, argKey, argValSrc));
   };
 
   renderFuncSelect = () => {
     const { config, field, operator, customProps, value, readonly } = this.props;
-    const funcKey = value ? value.get('func') : null;
+    const funcKey = value ? value.get('leftFunc') : null;
     const selectProps = {
       value: funcKey,
       setValue: this.setFunc,
@@ -114,6 +120,8 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
     const arg = value ? value.getIn(['args', argKey]) : null;
     const argVal = arg ? arg.get('value') : undefined;
     const argValSrc = arg ? arg.get('valueSrc') || 'value' : undefined;
+
+    console.log('A', argKey, value?.toJS(), arg);
 
     const widgetProps = {
       config,
@@ -174,6 +182,8 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
       return null;
     }
 
+    console.log('ARGS', Object.keys(args));
+
     return (
       <>
         {this.renderBracketBefore(funcDefinition)}
@@ -193,6 +203,7 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
   };
 
   render() {
+    console.log('props', this.props?.value?.toJS());
     return (
       <Col className="rule--func--wrapper">
         {this.renderFuncSelect()}

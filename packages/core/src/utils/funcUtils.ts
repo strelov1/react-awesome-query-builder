@@ -123,6 +123,31 @@ export const setFunc = (value, funcKey, config) => {
   return value;
 };
 
+export const setLeftFunc = (value, funcKey, config) => {
+  const { fieldSeparator } = config.settings;
+  value = value || new Immutable.Map();
+
+  if (Array.isArray(funcKey)) {
+    // fix for cascader
+    funcKey = funcKey.join(fieldSeparator);
+  }
+  value = value.set('leftFunc', funcKey);
+  value = value.set('args', new Immutable.Map());
+
+  // defaults
+  const funcConfig = funcKey && getFuncConfig(funcKey, config);
+  if (funcConfig) {
+    for (const argKey in funcConfig.args) {
+      const argConfig = funcConfig.args[argKey];
+      if (argConfig.defaultValue !== undefined) {
+        value = value.setIn(['args', argKey, 'value'], argConfig.defaultValue);
+      }
+    }
+  }
+
+  return value;
+};
+
 /**
  * Used @ FuncWidget
  * @param {Immutable.Map} value
@@ -140,10 +165,36 @@ export const setArgValue = (value, argKey, argVal) => {
  * Used @ FuncWidget
  * @param {Immutable.Map} value
  * @param {string} argKey
+ * @param {*} argVal
+ */
+export const setLeftArgValue = (value, argKey, argVal) => {
+  if (value && value.get('leftFunc')) {
+    value = value.setIn(['args', argKey, 'value'], argVal);
+  }
+  return value;
+};
+
+/**
+ * Used @ FuncWidget
+ * @param {Immutable.Map} value
+ * @param {string} argKey
  * @param {string} argValSrc
  */
 export const setArgValueSrc = (value, argKey, argValSrc) => {
   if (value && value.get('func')) {
+    value = value.setIn(['args', argKey], new Immutable.Map({ valueSrc: argValSrc }));
+  }
+  return value;
+};
+
+/**
+ * Used @ FuncWidget
+ * @param {Immutable.Map} value
+ * @param {string} argKey
+ * @param {string} argValSrc
+ */
+export const setLeftArgValueSrc = (value, argKey, argValSrc) => {
+  if (value && value.get('leftFunc')) {
     value = value.setIn(['args', argKey], new Immutable.Map({ valueSrc: argValSrc }));
   }
   return value;

@@ -11,23 +11,45 @@ const config = {
       label: 'test',
       type: 'text',
     },
-    longValue: {
-      label: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since t',
-      type: 'text',
-    },
+    // longValue: {
+    //   label:
+    //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since t",
+    //   type: 'text',
+    // },
   },
   funcs: {
     LOWER: {
       label: 'Lowercase',
-      mongoFunc: '$toLower',
-      jsonLogic: 'toLowerCase',
-      jsonLogicIsMethod: true,
       returnType: 'text',
+      sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
+        console.log('SQL', val, fieldDef, wgtDef, op, opDef);
+        return SqlString.escape(val);
+      },
       args: {
-        str: {
+        first: {
           label: 'String',
           type: 'text',
           valueSources: ['value', 'field'],
+        },
+        second: {
+          label: 'String',
+          type: 'text',
+          valueSources: ['value', 'field'],
+        },
+      },
+    },
+    EXPRESION: {
+      label: 'EXPRESION',
+      returnType: 'text',
+      sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
+        console.log('SQL', val, fieldDef, wgtDef, op, opDef);
+        return SqlString.escape(val);
+      },
+      args: {
+        first: {
+          label: 'String',
+          type: 'text',
+          valueSources: ['value'],
         },
       },
     },

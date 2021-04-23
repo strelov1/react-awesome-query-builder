@@ -145,7 +145,9 @@ const sqlFormatValue = (
 
 // meta is mutable
 const sqlFormatItem = (item, config, meta) => {
-  if (!item) return undefined;
+  if (!item) {
+    return undefined;
+  }
   const type = item.get('type');
   const properties = item.get('properties') || new Map();
   const children = item.get('children1');
@@ -155,10 +157,15 @@ const sqlFormatItem = (item, config, meta) => {
     const list = children
       .map((currentChild) => sqlFormatItem(currentChild, config, meta))
       .filter((currentChild) => typeof currentChild !== 'undefined');
-    if (!list.size) return undefined;
+
+    if (!list.size) {
+      return undefined;
+    }
 
     let conjunction = properties.get('conjunction');
-    if (!conjunction) conjunction = defaultConjunction(config);
+    if (!conjunction) {
+      conjunction = defaultConjunction(config);
+    }
     const conjunctionDefinition = config.conjunctions[conjunction];
 
     return conjunctionDefinition.sqlFormatConj(list, conjunction, not);
@@ -166,6 +173,7 @@ const sqlFormatItem = (item, config, meta) => {
   if (type === 'rule') {
     const field = properties.get('field');
     const fieldFunc = properties.get('fieldFunc');
+
     const operator = properties.get('operator');
     const operatorOptions = properties.get('operatorOptions');
     if (field == null || operator == null) return undefined;
@@ -223,19 +231,54 @@ const sqlFormatItem = (item, config, meta) => {
         isRev = true;
       }
     }
+
     if (!fn) {
       const _operator = operatorDefinition.sqlOp || operator;
       if (cardinality == 0) {
         fn = (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
           if (fieldFunc) {
-            return `${fieldFunc}(${field}) ${_operator}`;
+            const leftFunc = fieldFunc.get('leftFunc');
+
+            const leftArgs = Object.values(fieldFunc.get('args').toJS());
+
+            if (leftFunc === 'EXPRESION') {
+              const expr = leftArgs[0]?.value;
+              return `${expr} ${_operator}`;
+            }
+
+            const args = leftArgs.reduce((acc, item) => {
+              const accStr = acc == '' ? acc : `${acc},`;
+              if (item?.valueSrc && item.valueSrc == 'field') {
+                return `${accStr}${item.value}`;
+              }
+              return `${accStr}'${item.value}'`;
+            }, '');
+
+            return `${leftFunc}(${args}) ${_operator}`;
           }
           return `${field} ${_operator}`;
         };
       } else if (cardinality == 1) {
         fn = (field, op, value, valueSrc, valueType, opDef, operatorOptions) => {
           if (fieldFunc) {
-            return `${fieldFunc}(${field}) ${_operator} ${value}`;
+            const leftFunc = fieldFunc.get('leftFunc');
+
+            const leftArgs = Object.values(fieldFunc.get('args').toJS());
+
+            if (leftFunc === 'EXPRESION') {
+              const expr = leftArgs[0]?.value;
+              return `${expr} ${_operator} ${value}`;
+            }
+
+            const args = leftArgs.reduce((acc, item) => {
+              const accStr = acc == '' ? acc : `${acc},`;
+              if (item?.valueSrc && item.valueSrc == 'field') {
+                return `${accStr}${item.value}`;
+              }
+              return `${accStr}'${item.value}'`;
+            }, '');
+
+            return `${leftFunc}(${args}) ${_operator} ${value}`;
           }
           return `${field} ${_operator} ${value}`;
         };
@@ -251,6 +294,7 @@ const sqlFormatItem = (item, config, meta) => {
         };
       }
     }
+
     if (!fn) {
       meta.errors.push(`Operator ${operator} is not supported`);
       return undefined;

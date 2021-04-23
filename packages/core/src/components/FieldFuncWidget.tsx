@@ -46,6 +46,7 @@ export default class FieldFuncWidget extends PureComponent<FuncWidgetProps> {
   };
 
   render() {
+    console.log('CONFIG', this.props.config.funcs);
     return <Col className="rule--func--wrapper">{this.renderFuncSelect()}</Col>;
   }
 }

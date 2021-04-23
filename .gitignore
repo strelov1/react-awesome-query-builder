@@ -64,3 +64,5 @@ typings/
 .env
 
 tsconfig.tsbuildinfo
+
+.idea

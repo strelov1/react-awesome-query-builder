@@ -15,7 +15,7 @@ import OperatorWrapper from './OperatorWrapper';
 import Col from './Col';
 import FieldWrapper from './FieldWrapper';
 import ConfirmFn from './ConfirmFn';
-import { FieldFuncWidget } from './widgets';
+import { FieldFuncWidget, FuncWidget, FuncWidget2 } from './widgets';
 
 const dummyFn = () => {};
 const DragIcon = () => (
@@ -181,7 +181,7 @@ class Rule extends PureComponent<RuleProps> {
       renderButton: Btn,
     } = config.settings;
 
-    const field = (
+    const field = !selectedFieldFunc ? (
       <FieldWrapper
         key="field"
         classname="rule--field"
@@ -191,6 +191,8 @@ class Rule extends PureComponent<RuleProps> {
         parentField={this.props.parentField}
         readonly={immutableFieldsMode}
       />
+    ) : (
+      ''
     );
     const operator = (
       <OperatorWrapper
@@ -273,21 +275,24 @@ class Rule extends PureComponent<RuleProps> {
 
     const filedFuncWidget = selectedField && (
       <Col key={`widget-for-${selectedField}`} className="rule--value">
-        <FieldFuncWidget
-          key="values"
+        <FuncWidget2
+          key="field-funct-widget"
           field={selectedField}
           operator={selectedOperator}
           value={selectedFieldFunc}
           config={config}
           setValue={this.props.setFieldFunc}
           readonly={immutableValuesMode}
+          selectedField={this.props.selectedField}
+          setField={!immutableOpsMode ? this.props.setField : dummyFn}
+          parentField={this.props.parentField}
         />
       </Col>
     );
 
     const fullWidget = [beforeWidget, widget, afterWidget];
 
-    const parts = [field, filedFuncWidget, operator, ...fullWidget, operatorOptions];
+    const parts = [filedFuncWidget, field, operator, ...fullWidget, operatorOptions];
 
     const drag = showDragIcon && (
       <span

@@ -21,6 +21,7 @@ export { default as vanillaConfirm } from './core/vanillaConfirm';
 
 export { default as ValueFieldWidget } from '../ValueField';
 export { default as FuncWidget } from '../FuncWidget';
+export { default as FuncWidget2 } from '../FuncWidget2';
 export { default as FieldFuncWidget } from '../FieldFuncWidget';
 
 export const VanillaProvider = ({ config, children }) => children;
