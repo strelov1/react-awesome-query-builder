@@ -243,8 +243,8 @@ const config = {
       label: 'EXPRESION',
       returnType: 'text',
       args: {
-        first: {
-          label: 'String',
+        expr: {
+          label: 'expr',
           type: 'text',
           valueSources: ['value'],
         },

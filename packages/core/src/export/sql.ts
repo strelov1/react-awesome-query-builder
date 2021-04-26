@@ -1,6 +1,6 @@
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import {
   getFieldConfig,
   getWidgetForFieldOp,
@@ -16,6 +16,14 @@ import { settings as defaultSettings } from '../config/default';
 import { completeValue } from '../utils/funcUtils';
 import { SqlString } from '../utils/sql';
 
+const extractExpr = (leftArgs: Map<string, any>): string => {
+  return leftArgs.get('expr')?.get('value') || '';
+};
+
+const extractArgs = (leftArgs: Map<string, any>): string => {
+  return leftArgs.map((v) => v.get('value')).join(',');
+};
+
 export const sqlFormat = (tree, config) => {
   const meta = {
     errors: [],
@@ -23,7 +31,9 @@ export const sqlFormat = (tree, config) => {
 
   const res = sqlFormatItem(tree, config, meta);
 
-  if (meta.errors.length) console.warn('Errors while exporting to SQL:', meta.errors);
+  if (meta.errors.length) {
+    console.warn('Errors while exporting to SQL:', meta.errors);
+  }
   return res;
 };
 
@@ -239,20 +249,12 @@ const sqlFormatItem = (item, config, meta) => {
           if (fieldFunc) {
             const leftFunc = fieldFunc.get('leftFunc');
 
-            const leftArgs = Object.values(fieldFunc.get('args').toJS());
-
             if (leftFunc === 'EXPRESION') {
-              const expr = leftArgs[0]?.value;
+              const expr = extractExpr(fieldFunc.get('args'));
               return `${expr} ${_operator}`;
             }
 
-            const args = leftArgs.reduce((acc, item) => {
-              const accStr = acc == '' ? acc : `${acc},`;
-              if (item?.valueSrc && item.valueSrc == 'field') {
-                return `${accStr}${item.value}`;
-              }
-              return `${accStr}'${item.value}'`;
-            }, '');
+            const args = extractArgs(fieldFunc.get('args'));
 
             return `${leftFunc}(${args}) ${_operator}`;
           }
@@ -263,21 +265,11 @@ const sqlFormatItem = (item, config, meta) => {
           if (fieldFunc) {
             const leftFunc = fieldFunc.get('leftFunc');
 
-            const leftArgs = Object.values(fieldFunc.get('args').toJS());
-
             if (leftFunc === 'EXPRESION') {
-              const expr = leftArgs[0]?.value;
+              const expr = extractExpr(fieldFunc.get('args'));
               return `${expr} ${_operator} ${value}`;
             }
-
-            const args = leftArgs.reduce((acc, item) => {
-              const accStr = acc == '' ? acc : `${acc},`;
-              if (item?.valueSrc && item.valueSrc == 'field') {
-                return `${accStr}${item.value}`;
-              }
-              return `${accStr}'${item.value}'`;
-            }, '');
-
+            const args = extractArgs(fieldFunc.get('args'));
             return `${leftFunc}(${args}) ${_operator} ${value}`;
           }
           return `${field} ${_operator} ${value}`;
@@ -287,8 +279,16 @@ const sqlFormatItem = (item, config, meta) => {
         fn = (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
           const valFrom = values.first();
           const valTo = values.get(1);
+
           if (fieldFunc) {
-            return `${fieldFunc}(${field})  ${_operator} ${valFrom} AND ${valTo}`;
+            const leftFunc = fieldFunc.get('leftFunc');
+
+            if (leftFunc === 'EXPRESION') {
+              const expr = extractExpr(fieldFunc.get('args'));
+              return `${expr} ${_operator} ${valFrom} AND ${valTo}`;
+            }
+            const args = extractArgs(fieldFunc.get('args'));
+            return `${leftFunc}(${args})  ${_operator} ${valFrom} AND ${valTo}`;
           }
           return `${field} ${_operator} ${valFrom} AND ${valTo}`;
         };
