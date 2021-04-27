@@ -122,10 +122,11 @@ function _extendFuncArgsConfig(subconfig, config) {
   }
 }
 
-function _extendFieldConfig(fieldConfig, config, isFuncArg = false) {
+function _extendFieldConfig(fieldConfigInput, config, isFuncArg = false) {
+  const fieldConfig = { ...fieldConfigInput };
+  const typeConfig = { ...config.types[fieldConfig.type] };
   let operators = null;
   let defaultOperator = null;
-  const typeConfig = config.types[fieldConfig.type];
   const excludeOperators = fieldConfig.excludeOperators || [];
   if (fieldConfig.type != '!struct' && fieldConfig.type != '!group') {
     if (!typeConfig) {
@@ -139,8 +140,9 @@ function _extendFieldConfig(fieldConfig, config, isFuncArg = false) {
       }
       config._fieldsCntByType[fieldConfig.type]++;
     }
-
-    if (!fieldConfig.widgets) fieldConfig.widgets = {};
+    if (!fieldConfig.widgets) {
+      fieldConfig.widgets = {};
+    }
     fieldConfig.mainWidget = fieldConfig.mainWidget || typeConfig.mainWidget;
     fieldConfig.valueSources = fieldConfig.valueSources || typeConfig.valueSources;
     for (const widget in typeConfig.widgets) {

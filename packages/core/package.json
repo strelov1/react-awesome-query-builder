@@ -12,7 +12,6 @@
     "immutable": "*",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "react": "^17.0.2",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "sqlstring": "^2.3.2"

@@ -3,6 +3,44 @@ import { BasicConfig } from '@react-query-builder/core';
 const config = {
   ...BasicConfig,
   fields: {
+    user: {
+      label: 'User',
+      tooltip: 'Group of fields',
+      type: '!struct',
+      subfields: {
+        firstName: {
+          label2: 'Username',
+          type: 'text',
+          excludeOperators: ['proximity'],
+          tableName: 't2.fristName',
+          fieldSettings: {
+            validateValue: (val: any, fieldSettings: any) => {
+              return val.length < 10;
+            },
+          },
+          mainWidgetProps: {
+            valueLabel: 'Name',
+            valuePlaceholder: 'Enter name',
+          },
+        },
+        login: {
+          type: 'text',
+          tableName: 't2.login',
+          excludeOperators: ['proximity'],
+          fieldSettings: {
+            validateValue: (val: any, fieldSettings: any) => {
+              return (
+                val.length < 10 && (val === '' || val.match(/^[A-Za-z0-9_-]+$/) !== null)
+              );
+            },
+          },
+          mainWidgetProps: {
+            valueLabel: 'Login',
+            valuePlaceholder: 'Enter login',
+          },
+        },
+      },
+    },
     qty: {
       label: 'qty',
       type: 'text',

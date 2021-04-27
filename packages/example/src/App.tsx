@@ -9,6 +9,8 @@ const App = () => {
     Utils.loadTree({ id: Utils.uuid(), type: 'group' })
   );
 
+  console.log('isValidTree', Utils.isValidTree(tree));
+
   const onChange = (immutableTree: any) => {
     setTree(immutableTree);
   };

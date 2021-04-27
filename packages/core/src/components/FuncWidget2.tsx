@@ -121,8 +121,6 @@ export default class FuncWidget extends PureComponent<FuncWidgetProps> {
     const argVal = arg ? arg.get('value') : undefined;
     const argValSrc = arg ? arg.get('valueSrc') || 'value' : undefined;
 
-    console.log('A', argKey, value?.toJS(), arg);
-
     const widgetProps = {
       config,
       fieldFunc: funcKey,
@@ -182,8 +180,6 @@ export default class FuncWidget extends PureComponent<FuncWidgetProps> {
       return null;
     }
 
-    console.log('ARGS', Object.keys(args));
-
     return (
       <>
         {this.renderBracketBefore(funcDefinition)}
@@ -203,7 +199,6 @@ export default class FuncWidget extends PureComponent<FuncWidgetProps> {
   };
 
   render() {
-    console.log('props', this.props?.value?.toJS());
     return (
       <Col className="rule--func--wrapper">
         {this.renderFuncSelect()}
