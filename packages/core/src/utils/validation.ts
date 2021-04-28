@@ -9,13 +9,7 @@ import {
   getFuncConfig,
   getValueSourcesForFieldOp,
 } from './configUtils';
-import {
-  defaultValue,
-  deepEqual,
-  getTitleInListValues,
-  getValueInListValues,
-  getItemInListValues,
-} from './stuff';
+import { defaultValue, deepEqual, getItemInListValues } from './stuff';
 import { defaultOperatorOptions } from './defaultUtils';
 
 const typeOf = (v) => {
@@ -24,8 +18,12 @@ const typeOf = (v) => {
 };
 
 const isTypeOf = (v, type) => {
-  if (typeOf(v) == type) return true;
-  if (type == 'number' && !isNaN(v)) return true; // can be casted
+  if (typeOf(v) == type) {
+    return true;
+  }
+  if (type == 'number' && !isNaN(v)) {
+    return true; // can be casted
+  }
   return false;
 };
 
@@ -85,8 +83,12 @@ function validateGroup(item, path, itemId, meta, c) {
     item = undefined;
   }
 
-  if (sanitized) meta.sanitized = true;
-  if (sanitized && item) item = item.set('children1', children);
+  if (sanitized) {
+    meta.sanitized = true;
+  }
+  if (sanitized && item) {
+    item = item.set('children1', children);
+  }
   return item;
 }
 
@@ -265,7 +267,6 @@ export const validateValue = (
     }
 
     if (!validError) {
-      const fieldConfig = getFieldConfig(field, config);
       const w = getWidgetForFieldOp(config, field, operator, valueSrc);
       const fieldWidgetDefinition = omit(
         getFieldWidgetConfig(config, field, operator, w, valueSrc),
@@ -310,7 +311,6 @@ const validateNormalValue = (
   isEndValue = false,
   canFix = false
 ) => {
-  const fixedValue = value;
   const fieldConfig = getFieldConfig(field, config);
   const w = getWidgetForFieldOp(config, field, operator, valueSrc);
   const wConfig = config.widgets[w];
@@ -406,7 +406,6 @@ const validateFuncValue = (
   canFix = false
 ) => {
   let fixedValue = value;
-
   if (value) {
     const funcKey = value.get('func');
     if (funcKey) {
@@ -433,7 +432,7 @@ const validateFuncValue = (
               operator,
               argValue,
               argConfig.type,
-              argValueSrc,
+              argValueSrc || 'text',
               canFix,
               isEndValue,
               false
@@ -486,7 +485,9 @@ export const getNewValueForFieldOp = function (
   changedField = null,
   canFix = true
 ) {
-  if (!oldConfig) oldConfig = config;
+  if (!oldConfig) {
+    oldConfig = config;
+  }
   const currentField = current.get('field');
   const currentOperator = current.get('operator');
   const currentValue = current.get('value');
@@ -545,7 +546,9 @@ export const getNewValueForFieldOp = function (
     const canReuseWidget =
       newValueWidget == currentValueWidget ||
       (convertableWidgets[currentValueWidget] || []).includes(newValueWidget);
-    if (!canReuseWidget) canReuseValue = false;
+    if (!canReuseWidget) {
+      canReuseValue = false;
+    }
   }
 
   if (
@@ -562,6 +565,7 @@ export const getNewValueForFieldOp = function (
     null,
     currentValueSrc.first()
   );
+
   const valueSources = getValueSourcesForFieldOp(config, newField, newOperator);
 
   const valueFixes = {};
@@ -615,8 +619,9 @@ export const getNewValueForFieldOp = function (
           }
         }
       } else if (operatorCardinality == 1 && (firstWidgetConfig || newFieldConfig)) {
-        if (newFieldConfig.defaultValue !== undefined) v = newFieldConfig.defaultValue;
-        else if (
+        if (newFieldConfig.defaultValue !== undefined) {
+          v = newFieldConfig.defaultValue;
+        } else if (
           newFieldConfig.fieldSettings &&
           newFieldConfig.fieldSettings.defaultValue !== undefined
         ) {

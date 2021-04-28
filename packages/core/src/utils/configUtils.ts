@@ -273,7 +273,9 @@ export const getFuncArgConfig = (funcKey, argKey, config) => {
 };
 
 export const getFieldConfig = (field, config) => {
-  if (!field) return null;
+  if (!field) {
+    return null;
+  }
   if (typeof field === 'object' && !field.func && !!field.type) {
     return field;
   }
@@ -297,6 +299,9 @@ export const getFieldConfig = (field, config) => {
       }
     }
   );
+  if (!ret) {
+    return fieldConfig.type;
+  }
 
   return ret;
 };
@@ -457,10 +462,13 @@ export const getValueLabel = (
 function _getWidgetsAndSrcsForFieldOp(config, field, operator = null, valueSrc = null) {
   const widgets = [];
   const valueSrcs = [];
-  if (!field) return { widgets, valueSrcs };
+  if (!field) {
+    return { widgets, valueSrcs };
+  }
   const isFuncArg = typeof field === 'object' && !!field.type;
   const fieldConfig = getFieldConfig(field, config);
   const opConfig = operator ? config.operators[operator] : null;
+
   if (fieldConfig && fieldConfig.widgets) {
     for (const widget in fieldConfig.widgets) {
       const widgetConfig = fieldConfig.widgets[widget];
@@ -526,8 +534,12 @@ export const getValueSourcesForFieldOp = (
       return config._fieldsCntByType[fieldDefinition.type] > 1;
     }
     if (vs == 'func' && fieldDefinition) {
-      if (!config._funcsCntByType[fieldDefinition.type]) return false;
-      if (fieldDefinition.funcs) return fieldDefinition.funcs.length > 0;
+      if (!config._funcsCntByType[fieldDefinition.type]) {
+        return false;
+      }
+      if (fieldDefinition.funcs) {
+        return fieldDefinition.funcs.length > 0;
+      }
       return true;
     }
     return true;

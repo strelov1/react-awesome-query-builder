@@ -8,7 +8,9 @@ import { getFieldConfig, getFuncConfig } from './configUtils';
  * @return {* | undefined} - undefined if func value is not complete (missing required arg vals); can return completed value != value
  */
 export const completeValue = (value, valueSrc, config) => {
-  if (valueSrc == 'func') return completeFuncValue(value, config);
+  if (valueSrc == 'func') {
+    return completeFuncValue(value, config);
+  }
   return value;
 };
 
@@ -19,10 +21,14 @@ export const completeValue = (value, valueSrc, config) => {
  */
 export const completeFuncValue = (value, config) => {
   const _checkFuncValue = (value) => {
-    if (!value) return undefined;
+    if (!value) {
+      return undefined;
+    }
     const funcKey = value.get('func');
     const funcConfig = funcKey && getFuncConfig(funcKey, config);
-    if (!funcConfig) return undefined;
+    if (!funcConfig) {
+      return undefined;
+    }
     let complValue = value;
     let tmpHasOptional = false;
     for (const argKey in funcConfig.args) {

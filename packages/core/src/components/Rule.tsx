@@ -181,7 +181,7 @@ class Rule extends PureComponent<RuleProps> {
       renderButton: Btn,
     } = config.settings;
 
-    const field = !selectedFieldFunc ? (
+    const field = !selectedFieldFunc?.leftFunc ? (
       <FieldWrapper
         key="field"
         classname="rule--field"

@@ -277,8 +277,8 @@ const config = {
         },
       },
     },
-    EXPRESION: {
-      label: 'EXPRESION',
+    EXPRESSION: {
+      label: 'EXPRESSION',
       returnType: 'text',
       args: {
         expr: {

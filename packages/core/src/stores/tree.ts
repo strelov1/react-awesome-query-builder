@@ -293,7 +293,6 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
 };
 
 const setFieldFunc = (state, path, fieldFunc, config) => {
-  console.log('setFieldFunc', fieldFunc.toJS());
   return state.updateIn(expandTreePath(path, 'properties'), (map) =>
     map.withMutations((current) => {
       return current.set('fieldFunc', fieldFunc);
@@ -369,11 +368,13 @@ const setField = (state, path, newField, config) => {
           : null;
       let newOperator = null;
       const availOps = getOperatorsForField(config, newField);
-      if (availOps && availOps.length == 1) newOperator = availOps[0];
-      else if (availOps && availOps.length > 1) {
+      if (availOps && availOps.length == 1) {
+        newOperator = availOps[0];
+      } else if (availOps && availOps.length > 1) {
         for (const strategy of setOpOnChangeField || []) {
-          if (strategy == 'keep') newOperator = lastOp;
-          else if (strategy == 'default') {
+          if (strategy == 'keep') {
+            newOperator = lastOp;
+          } else if (strategy == 'default') {
             newOperator = defaultOperator(config, newField, false);
           } else if (strategy == 'first') {
             newOperator = getFirstOperator(config, newField);
@@ -477,7 +478,9 @@ const setValue = (state, path, delta, value, valueType, config, __isInternal) =>
   const { fieldSeparator, showErrorMessage } = config.settings;
   const valueSrc =
     state.getIn(expandTreePath(path, 'properties', 'valueSrc', `${delta}`)) || null;
-  if (valueSrc === 'field' && Array.isArray(value)) value = value.join(fieldSeparator);
+  if (valueSrc === 'field' && Array.isArray(value)) {
+    value = value.join(fieldSeparator);
+  }
 
   const field = state.getIn(expandTreePath(path, 'properties', 'field')) || null;
   const operator = state.getIn(expandTreePath(path, 'properties', 'operator')) || null;
@@ -485,6 +488,7 @@ const setValue = (state, path, delta, value, valueType, config, __isInternal) =>
   const isEndValue = false;
   const canFix = false;
   const calculatedValueType = valueType || calculateValueType(value, valueSrc, config);
+
   const [validateError, fixedValue] = validateValue(
     config,
     field,
@@ -583,7 +587,6 @@ const setValue = (state, path, delta, value, valueType, config, __isInternal) =>
     );
     state.__isInternalValueChange = false;
   }
-
   return state;
 };
 

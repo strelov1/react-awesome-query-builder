@@ -93,7 +93,9 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
       argDefinition.valueSources[0] == 'const';
     const forceShow =
       !config.settings.showLabels && (argDefinition.type == 'boolean' || isConst);
-    if (!forceShow) return null;
+    if (!forceShow) {
+      return null;
+    }
     return <Col className="rule--func--arg-label">{argDefinition.label || argKey}</Col>;
   };
 
@@ -105,7 +107,9 @@ export default class FuncWidget2 extends PureComponent<FuncWidgetProps> {
       argDefinition.valueSources[0] == 'const';
     const forceShow =
       !config.settings.showLabels && (argDefinition.type == 'boolean' || isConst);
-    if (!forceShow) return null;
+    if (!forceShow) {
+      return null;
+    }
     return <Col className="rule--func--arg-label-sep">:</Col>;
   };
 

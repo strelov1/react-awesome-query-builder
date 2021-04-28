@@ -49,7 +49,9 @@ const sqlFormatValue = (
   operator,
   operatorDefinition
 ) => {
-  if (currentValue === undefined) return undefined;
+  if (currentValue === undefined) {
+    return undefined;
+  }
   const { fieldSeparator } = config.settings;
   let ret;
   if (valueSrc == 'field') {
@@ -61,7 +63,6 @@ const sqlFormatValue = (
       const fieldParts = Array.isArray(rightField)
         ? rightField
         : rightField.split(fieldSeparator);
-      const _fieldKeys = getFieldPath(rightField, config);
       const fieldPartsLabels = getFieldPathLabels(rightField, config);
       const fieldFullLabel = fieldPartsLabels
         ? fieldPartsLabels.join(fieldSeparator)
@@ -94,17 +95,18 @@ const sqlFormatValue = (
       const argVal = args ? args.get(argKey) : undefined;
       const argValue = argVal ? argVal.get('value') : undefined;
       const argValueSrc = argVal ? argVal.get('valueSrc') : undefined;
-      const formattedArgVal = sqlFormatValue(
-        meta,
-        config,
-        argValue,
-        argValueSrc,
-        argConfig.type,
-        fieldDef,
-        argConfig,
-        null,
-        null
-      );
+      // const formattedArgVal = sqlFormatValue(
+      //   meta,
+      //   config,
+      //   argValue,
+      //   argValueSrc,
+      //   argConfig.type,
+      //   fieldDef,
+      //   argConfig,
+      //   null,
+      //   null
+      // );
+      const formattedArgVal = argValue;
       if (argValue != undefined && formattedArgVal === undefined) {
         meta.errors.push(`Can't format value of arg ${argKey} for func ${funcKey}`);
         return undefined;
@@ -119,9 +121,13 @@ const sqlFormatValue = (
       const args = [formattedArgs];
       ret = fn(...args);
     } else {
-      ret = `${funcName}(${Object.entries(formattedArgs)
-        .map(([k, v]) => v)
-        .join(', ')})`;
+      if (funcName === 'EXPRESSION') {
+        ret = formattedArgs.expr;
+      } else {
+        ret = `${funcName}(${Object.entries(formattedArgs)
+          .map(([k, v]) => v)
+          .join(', ')})`;
+      }
     }
   } else if (typeof fieldWidgetDefinition.sqlFormatValue === 'function') {
     const fn = fieldWidgetDefinition.sqlFormatValue;
@@ -184,7 +190,9 @@ const sqlFormatItem = (item, config, meta) => {
 
     const operator = properties.get('operator');
     const operatorOptions = properties.get('operatorOptions');
-    if (field == null || operator == null) return undefined;
+    if (field == null || operator == null) {
+      return undefined;
+    }
 
     const fieldDefinition = getFieldConfig(field, config) || {};
     const operatorDefinition = getOperatorConfig(config, operator, field) || {};
@@ -226,9 +234,12 @@ const sqlFormatItem = (item, config, meta) => {
       }
       return fv;
     });
+
     const hasUndefinedValues = value.filter((v) => v === undefined).size > 0;
-    if (hasUndefinedValues || value.size < cardinality) return undefined;
-    const formattedValue = cardinality == 1 ? value.first() : value;
+    if (hasUndefinedValues || value.size < cardinality) {
+      return undefined;
+    }
+    let formattedValue = cardinality == 1 ? value.first() : value;
 
     // find fn to format expr
     let isRev = false;
@@ -240,14 +251,17 @@ const sqlFormatItem = (item, config, meta) => {
       }
     }
 
+    let leftFunc = '';
+    if (fieldFunc && fieldFunc.get('leftFunc')) {
+      leftFunc = fieldFunc.get('leftFunc');
+    }
+
     if (!fn) {
       const _operator = operatorDefinition.sqlOp || operator;
       if (cardinality == 0) {
         fn = (field, op, values, valueSrc, valueType, opDef, operatorOptions) => {
-          if (fieldFunc) {
-            const leftFunc = fieldFunc.get('leftFunc');
-
-            if (leftFunc === 'EXPRESION') {
+          if (leftFunc) {
+            if (leftFunc === 'EXPRESSION') {
               const expr = extractExpr(fieldFunc.get('args'));
               return `${expr} ${_operator}`;
             }
@@ -260,10 +274,8 @@ const sqlFormatItem = (item, config, meta) => {
         };
       } else if (cardinality == 1) {
         fn = (field, op, value, valueSrc, valueType, opDef, operatorOptions) => {
-          if (fieldFunc) {
-            const leftFunc = fieldFunc.get('leftFunc');
-
-            if (leftFunc === 'EXPRESION') {
+          if (leftFunc) {
+            if (leftFunc === 'EXPRESSION') {
               const expr = extractExpr(fieldFunc.get('args'));
               return `${expr} ${_operator} ${value}`;
             }
@@ -278,10 +290,8 @@ const sqlFormatItem = (item, config, meta) => {
           const valFrom = values.first();
           const valTo = values.get(1);
 
-          if (fieldFunc) {
-            const leftFunc = fieldFunc.get('leftFunc');
-
-            if (leftFunc === 'EXPRESION') {
+          if (leftFunc) {
+            if (leftFunc === 'EXPRESSION') {
               const expr = extractExpr(fieldFunc.get('args'));
               return `${expr} ${_operator} ${valFrom} AND ${valTo}`;
             }
