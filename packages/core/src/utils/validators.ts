@@ -29,16 +29,14 @@ export const checkWhiteCommand = (
   query: string,
   whiteCommandsList: string[]
 ): boolean => {
-  const queryCommands = query
-    .split('(')
-    .filter((item) => item.trim())
-    .filter((item) => !item.includes(')'));
+  const regexp = /(\w*\()/gm;
+  const queryCommands = [...query.matchAll(regexp)]
+    .map((item) => item[0].replace('(', ''))
+    .filter((item) => item.trim());
 
   const blackCommands = queryCommands.filter(
-    (command: string) => !whiteCommandsList.includes(command)
+    (command) => !whiteCommandsList.includes(command)
   );
-
-  console.log('blackCommands', queryCommands, blackCommands);
 
   if (blackCommands.length) {
     return false;

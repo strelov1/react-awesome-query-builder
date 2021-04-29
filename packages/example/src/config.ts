@@ -13,11 +13,6 @@ const config = {
           type: 'text',
           excludeOperators: ['proximity'],
           tableName: 't2.fristName',
-          fieldSettings: {
-            validateValue: (val: any, fieldSettings: any) => {
-              return val.length < 10;
-            },
-          },
           mainWidgetProps: {
             valueLabel: 'Name',
             valuePlaceholder: 'Enter name',

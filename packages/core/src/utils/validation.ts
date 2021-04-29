@@ -286,9 +286,10 @@ export const validateValue = (
         const args = [fixedValue, fieldSettings];
         if (valueSrc == 'field') args.push(rightFieldDefinition);
         const validResult = fn(...args);
+        console.log('fn', fn, validResult);
         if (typeof validResult === 'boolean') {
           if (validResult == false) {
-            validError = 'Invalid value';
+            validError = 'Invalid value3';
           }
         } else {
           validError = validResult;
