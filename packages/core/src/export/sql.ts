@@ -95,18 +95,17 @@ const sqlFormatValue = (
       const argVal = args ? args.get(argKey) : undefined;
       const argValue = argVal ? argVal.get('value') : undefined;
       const argValueSrc = argVal ? argVal.get('valueSrc') : undefined;
-      // const formattedArgVal = sqlFormatValue(
-      //   meta,
-      //   config,
-      //   argValue,
-      //   argValueSrc,
-      //   argConfig.type,
-      //   fieldDef,
-      //   argConfig,
-      //   null,
-      //   null
-      // );
-      const formattedArgVal = argValue;
+      const formattedArgVal = sqlFormatValue(
+        meta,
+        config,
+        argValue,
+        argValueSrc,
+        argConfig.type,
+        fieldDef,
+        argConfig,
+        null,
+        null
+      );
       if (argValue != undefined && formattedArgVal === undefined) {
         meta.errors.push(`Can't format value of arg ${argKey} for func ${funcKey}`);
         return undefined;
@@ -120,14 +119,12 @@ const sqlFormatValue = (
       const fn = funcConfig.sqlFormatFunc;
       const args = [formattedArgs];
       ret = fn(...args);
+    } else if (funcName === 'EXPRESSION') {
+      ret = formattedArgs.expr;
     } else {
-      if (funcName === 'EXPRESSION') {
-        ret = formattedArgs.expr;
-      } else {
-        ret = `${funcName}(${Object.entries(formattedArgs)
-          .map(([k, v]) => v)
-          .join(', ')})`;
-      }
+      ret = `${funcName}(${Object.entries(formattedArgs)
+        .map(([k, v]) => v)
+        .join(', ')})`;
     }
   } else if (typeof fieldWidgetDefinition.sqlFormatValue === 'function') {
     const fn = fieldWidgetDefinition.sqlFormatValue;
@@ -152,7 +149,8 @@ const sqlFormatValue = (
     }
     ret = fn(...args);
   } else {
-    ret = SqlString.escape(currentValue);
+    // ret = SqlString.escape(currentValue);
+    ret = currentValue;
   }
   return ret;
 };
@@ -239,7 +237,7 @@ const sqlFormatItem = (item, config, meta) => {
     if (hasUndefinedValues || value.size < cardinality) {
       return undefined;
     }
-    let formattedValue = cardinality == 1 ? value.first() : value;
+    const formattedValue = cardinality == 1 ? value.first() : value;
 
     // find fn to format expr
     let isRev = false;

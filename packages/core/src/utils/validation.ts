@@ -11,6 +11,11 @@ import {
 } from './configUtils';
 import { defaultValue, deepEqual, getItemInListValues } from './stuff';
 import { defaultOperatorOptions } from './defaultUtils';
+import {
+  checkASCIIchart,
+  checkResctrictedSymbolds,
+  checkWhiteCommand,
+} from './validators';
 
 const typeOf = (v) => {
   if (typeof v === 'object' && v !== null && Array.isArray(v)) return 'array';
@@ -282,7 +287,9 @@ export const validateValue = (
         if (valueSrc == 'field') args.push(rightFieldDefinition);
         const validResult = fn(...args);
         if (typeof validResult === 'boolean') {
-          if (validResult == false) validError = 'Invalid value';
+          if (validResult == false) {
+            validError = 'Invalid value';
+          }
         } else {
           validError = validResult;
         }
@@ -352,6 +359,21 @@ const validateNormalValue = (
     }
     if (fieldSettings.max != null && value > fieldSettings.max) {
       return [`Value ${value} > max ${fieldSettings.max}`, value];
+    }
+  }
+
+  if (!checkResctrictedSymbolds(value, config.settings.restrictedSymbolds)) {
+    return [`Value ${value} PERMITED Symbolds`, value];
+  }
+
+  if (!checkASCIIchart(value)) {
+    return [`Value ${value} PERMITED Chart`, value];
+  }
+
+  // Check commands by white list
+  if (value.includes('(')) {
+    if (!checkWhiteCommand(value, config.settings.whiteCommandList)) {
+      return [`Value ${value} PERMITED Command`, value];
     }
   }
 

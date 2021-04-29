@@ -27,13 +27,6 @@ const config = {
           type: 'text',
           tableName: 't2.login',
           excludeOperators: ['proximity'],
-          fieldSettings: {
-            validateValue: (val: any, fieldSettings: any) => {
-              return (
-                val.length < 10 && (val === '' || val.match(/^[A-Za-z0-9_-]+$/) !== null)
-              );
-            },
-          },
           mainWidgetProps: {
             valueLabel: 'Login',
             valuePlaceholder: 'Enter login',
@@ -54,6 +47,25 @@ const config = {
     //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since t",
     //   type: 'text',
     // },
+  },
+  settings: {
+    ...BasicConfig.settings,
+    whiteCommandList: [
+      'LOWER',
+      'UPPER',
+      'TRIM',
+      'LENGTH',
+      'TO_DATE',
+      'LAST_DAY',
+      'DATEDIFF',
+      'DATE_ADD',
+      'DATE_SUB',
+      'ADD_MOUNTHS',
+      'SUBSTR',
+      'REGEXP_EXTRACT',
+      'REGEXP_REPLACE',
+      'COALESCE',
+    ],
   },
   funcs: {
     LOWER: {
@@ -210,7 +222,7 @@ const config = {
       },
     },
     REGEXP_EXTRACT: {
-      label: 'SUBSTR',
+      label: 'REGEXP_EXTRACT',
       returnType: 'text',
       args: {
         str: {
@@ -231,7 +243,7 @@ const config = {
       },
     },
     REGEXP_REPLACE: {
-      label: 'SUBSTR',
+      label: 'REGEXP_REPLACE',
       returnType: 'text',
       args: {
         str: {

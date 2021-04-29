@@ -557,6 +557,7 @@ const widgets = {
       return isForDisplay ? `"${val}"` : JSON.stringify(val);
     },
     sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
+      return val;
       if (opDef.sqlOp == 'LIKE' || opDef.sqlOp == 'NOT LIKE') {
         return SqlString.escapeLike(val, op != 'starts_with', op != 'ends_with');
       }
@@ -1001,6 +1002,8 @@ const settings = {
   customFieldSelectProps: {
     showSearch: true,
   },
+  whiteCommandList: ['LOWER', 'UPPER'],
+  restrictedSymbolds: [`/`, `\\`],
 };
 
 //----------------------------

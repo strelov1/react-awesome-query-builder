@@ -687,6 +687,8 @@ export interface OtherSettings {
   fieldSeparatorDisplay?: string;
   formatReverse?: FormatReverse;
   formatField?: FormatField;
+  whiteCommandList?: string[];
+  restrictedSymbolds?: string[];
 }
 
 export type Settings = LocaleSettings &
